@@ -1,5 +1,9 @@
 package com.citi.dao;
 
-public interface ClearingMemberDAO {
+import com.citi.bean.ClearingMember;
 
+public interface ClearingMemberDAO {
+	
+	public ClearingMember getMemberByID(int id);
+	
 }
