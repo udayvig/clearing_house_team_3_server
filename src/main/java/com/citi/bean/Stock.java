@@ -5,7 +5,7 @@ public class Stock {
 	private int stockID;
 	private String stockName;
 	private double borrowingRate;
-	private String corporateAction;
+	private int corporateAction;
 	/**
 	 * @return the stockID
 	 */
@@ -45,13 +45,13 @@ public class Stock {
 	/**
 	 * @return the corporateAction
 	 */
-	public String getCorporateAction() {
+	public int getCorporateAction() {
 		return corporateAction;
 	}
 	/**
 	 * @param corporateAction the corporateAction to set
 	 */
-	public void setCorporateAction(String corporateAction) {
+	public void setCorporateAction(int corporateAction) {
 		this.corporateAction = corporateAction;
 	}
 
