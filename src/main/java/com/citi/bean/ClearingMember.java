@@ -7,50 +7,30 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class ClearingMember {
 
-		private int memberID;
-		private String memberName;
-		private String username;
-		private String password;
-		private HashMap<Integer, Integer> openingStockBalance;
-		private double openingFundBalance;
+		private int clearingMemberID;
+		private String clearingMemberName;
+		private double clearingMemberOpeningFundBalance;
 		
-		public int getMemberID() {
-			return memberID;
+		public int getClearingMemberID() {
+			return clearingMemberID;
 		}
-		public void setMemberID(int memberID) {
-			this.memberID = memberID;
+		public void setClearingMemberID(int clearingMemberID) {
+			this.clearingMemberID = clearingMemberID;
 		}
-		public String getMemberName() {
-			return memberName;
+		public String getClearingMemberName() {
+			return clearingMemberName;
 		}
-		public void setMemberName(String memberName) {
-			this.memberName = memberName;
+		public void setClearingMemberName(String clearingMemberName) {
+			this.clearingMemberName = clearingMemberName;
 		}
-		public String getUsername() {
-			return username;
+		public double getClearingMemberOpeningFundBalance() {
+			return clearingMemberOpeningFundBalance;
 		}
-		public void setUsername(String username) {
-			this.username = username;
+		public void setClearingMemberOpeningFundBalance(double clearingMemberOpeningFundBalance) {
+			this.clearingMemberOpeningFundBalance = clearingMemberOpeningFundBalance;
 		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		public HashMap<Integer, Integer> getOpeningStockBalance() {
-			return openingStockBalance;
-		}
-		public void setOpeningStockBalance(HashMap<Integer, Integer> openingStockBalance) {
-			this.openingStockBalance = openingStockBalance;
-		}
-		public double getOpeningFundBalance() {
-			return openingFundBalance;
-		}
-		public void setOpeningFundBalance(double openingFundBalance) {
-			this.openingFundBalance = openingFundBalance;
-		}
+		
+		
 }
