@@ -6,13 +6,17 @@ import com.citi.bean.Trade;
 
 public interface TradeDAO {
 	
-	Trade getTradeByTradeID (int tradeID);
+	void addTrade(int buyerClearingMemberID, int sellerClearingMemberID, double price, int quantity, int stockID);
 	
-	List<Trade> getTradeByStockID (int stockID);
+	Trade getTradeByTradeID(int tradeID);
 	
-	List<Trade> getTradeBySellerID (int sellerID);
+	List<Trade> getTradesByStockID(int stockID);
 	
-	List<Trade> getTradeByBuyerID (int buyerID);
+	List<Trade> getTradesByBuyingClearingMemberID(int buyerClearingMemberID);
 	
-	List<Trade> getAllTrades ();
+	List<Trade> getTradesBySellingClearingMemberID(int sellerClearingMemberID);
+	
+	List<Trade> getAllTrades();
+	
+	void deleteTrade(int tradeID);
 }

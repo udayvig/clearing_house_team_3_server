@@ -1,21 +1,25 @@
 package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.context.ApplicationContext;
+
+import com.citi.config.ProjectConfig;
+import com.citi.dao.TradeDAO;
+import com.citi.dao.TradeDAOImpl;
 
 @SpringBootApplication
-@Configuration
-@ComponentScan({"com.citi.*"})
-@EnableWebMvc
-@EnableAutoConfiguration
 public class CitiClearingHouseApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CitiClearingHouseApplication.class, args);
+		//SpringApplication.run(CitiClearingHouseApplication.class, args);
+		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
+		
+		TradeDAO trade = context.getBean(TradeDAOImpl.class);
+		//trade.addTrade(1, 2, 300.123, 4, 5);
+		trade.getTradeByTradeID(2);
+		trade.getTradesByBuyingClearingMemberID(1);
+		trade.getTradesBySellingClearingMemberID(2); trade.getTradesByStockID(5);
+		trade.getAllTrades();
 	}
-
 }
