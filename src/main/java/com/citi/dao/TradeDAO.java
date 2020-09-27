@@ -1,5 +1,22 @@
 package com.citi.dao;
 
-public interface TradeDAO {
+import java.util.List;
 
+import com.citi.bean.Trade;
+
+public interface TradeDAO {
+	
+	void addTrade(int buyerClearingMemberID, int sellerClearingMemberID, double price, int quantity, int stockID);
+	
+	Trade getTradeByTradeID(int tradeID);
+	
+	List<Trade> getTradesByStockID(int stockID);
+	
+	List<Trade> getTradesByBuyingClearingMemberID(int buyerClearingMemberID);
+	
+	List<Trade> getTradesBySellingClearingMemberID(int sellerClearingMemberID);
+	
+	List<Trade> getAllTrades();
+	
+	void deleteTrade(int tradeID);
 }
