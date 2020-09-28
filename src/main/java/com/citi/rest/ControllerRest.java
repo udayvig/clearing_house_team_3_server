@@ -36,7 +36,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/trade-volume")
 	@ResponseBody
-	public int tradeVolume() {
+	public HashMap<String, Integer> tradeVolume() {
 		return clearingHouseService.getTradeVolume();
 	}
 	
