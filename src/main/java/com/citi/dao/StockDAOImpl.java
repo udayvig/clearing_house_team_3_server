@@ -24,7 +24,7 @@ public class StockDAOImpl implements StockDAO {
 		String SQL = "insert into stock (stock_name, borrowing_rate, corporate_action) values (?, ?, ?)";
 
 		jdbcTemplateObject.update(SQL, stockName, borrowingRate, corporateAction);
-		System.out.println("Created new stock record");
+		//System.out.println("Created new stock record");
 
 		return;
 	}
@@ -35,7 +35,7 @@ public class StockDAOImpl implements StockDAO {
 
 		List<Stock> stockList = jdbcTemplateObject.query(SQL, new StockMapper());
 
-		System.out.println(stockList);
+		//System.out.println(stockList);
 
 		return stockList;
 		
@@ -48,7 +48,7 @@ public class StockDAOImpl implements StockDAO {
 
 		Stock stock = jdbcTemplateObject.queryForObject(SQL,new Object[] {stockID}, new StockMapper());
 
-		System.out.println(stock);
+		//System.out.println(stock);
 
 		return stock;
 	}
@@ -60,7 +60,7 @@ public class StockDAOImpl implements StockDAO {
 
 		jdbcTemplateObject.update(SQl, borrowingRate, stockID);
 
-		System.out.println("Borrowing rate for stock updated");
+		//System.out.println("Borrowing rate for stock updated");
 
 		return;
 		
@@ -73,7 +73,7 @@ public class StockDAOImpl implements StockDAO {
 
 		jdbcTemplateObject.update(SQl, corporateAction, stockID);
 
-		System.out.println("Corporate Action for stock updated");
+		//System.out.println("Corporate Action for stock updated");
 		
 	}
 
@@ -84,7 +84,7 @@ public class StockDAOImpl implements StockDAO {
 
 		jdbcTemplateObject.update(SQl, stockName, stockID);
 
-		System.out.println("Stock Name for stock updated");
+		//System.out.println("Stock Name for stock updated");
 		
 	}
 
@@ -96,13 +96,13 @@ public class StockDAOImpl implements StockDAO {
 		
 		jdbcTemplateObject.update(SQl, stockID);
 
-		System.out.println("Stock Name for stock deleted");
+		//System.out.println("Stock Name for stock deleted");
 		
 		String autoIncrementCurrentQuery = "SELECT MAX(stock_id) AS max FROM stock";
 		int resetID = jdbcTemplateObject.queryForObject(autoIncrementCurrentQuery, Integer.class) + 1;
 		String autoIncrementResetQuery = "ALTER TABLE stock AUTO_INCREMENT = ?";
 		jdbcTemplateObject.update(autoIncrementResetQuery, resetID);
-		System.out.println("Auto-increment reset complete: " + resetID);
+		//System.out.println("Auto-increment reset complete: " + resetID);
 	}
 
 	

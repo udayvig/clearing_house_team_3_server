@@ -1,5 +1,7 @@
 package com.citi.datageneration;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,20 +10,20 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.citi.bean.ClearingHouse;
 import com.citi.bean.Trade;
 import com.citi.dao.ClearingMemberDAO;
+import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
-import com.citi.dao.TradeDAOImpl;
+import com.citi.dao.TradeDAO;
 
-@Component
 public class RandomDataGeneration {
 	
 	private Random randomGenerator = new Random();
-	
-	//DAOObj Stock and CM
+	DecimalFormat df = new DecimalFormat("#.##");
 	
 	@Autowired
-	private TradeDAOImpl tradeDAO;
+	private TradeDAO tradeDAO;
 	
 	@Autowired
 	private ClearingMemberDAO clearingMemberDAO;
@@ -29,37 +31,51 @@ public class RandomDataGeneration {
 	@Autowired
 	private StockDAO stockDAO;
 	
+	@Autowired
+	private OpeningStockBalanceDAO openingStockBalanceDAO;
+	
+	@Autowired
+	private ClearingHouse clearingHouse;
+	
 	//Trades
 	int minForIDs = 1;
-	int maxForStockIDs = /*stockDAO.getAllStocksList().size() + 1;*/ 6;
-	int maxForClearingMemberIDs = /*clearingMemberDAO.getAllClearingMembers().size() + 1;*/ 6;
+	int maxForStockIDs = stockDAO.getAllStocksList().size() + 1;
+	int maxForClearingMemberIDs = clearingMemberDAO.getAllClearingMembers().size() + 1;
 	int minForQuantity = 10000;
-	int maxForQuantity = 500001;
+	int maxForQuantity = 100001;
 	
 	//Stock
 	int minForStockQuantity = 10000;
 	int maxForStockQuantity = 500001;
+	
+	//Corporate Actions
+	int maxForCorporateActions = 3;
+	
+	public void initialise() {
+		
+	}
 	
 	public List<Trade> generateTrades(int numberOfTrades){
 		List<Trade> trades = new ArrayList<>();
 		for(int i = 0; i < numberOfTrades; i++) {
 			Trade trade = generateTrade();
 			trades.add(trade);
-//			tradeDAO.addTrade(trade.getBuyerClearingMemberID(), trade.getSellerClearingMemberID(), 
-//					trade.getPrice(), trade.getQuantity(), trade.getStockID());
 		}
 		
 		return trades;
 	}
 	
 	private Trade generateTrade(){
+		df.setRoundingMode(RoundingMode.DOWN);
 		Trade trade = new Trade();
 		
 		int stockID = minForIDs + randomGenerator.nextInt(maxForStockIDs - minForIDs);
 		int buyerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
 		int sellerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
 		int quantity = minForQuantity + randomGenerator.nextInt(maxForQuantity - minForQuantity);
-		double price = ThreadLocalRandom.current().nextDouble(0, 1000);
+		double generatedPrice = ThreadLocalRandom.current().nextDouble(0, 1000);
+		
+		double price = new Double(df.format(generatedPrice));
 		
 		trade.setBuyerClearingMemberID(buyerClearingMemberID);
 		trade.setSellerClearingMemberID(sellerClearingMemberID);
@@ -71,40 +87,70 @@ public class RandomDataGeneration {
 		return trade;
 	}
 	
-	private void generateOpeningStockBalances(){
+	public void generateOpeningStockBalances(){
 		int balance = 0;
-		//List<OpeningStockBalance> openingStockBalanceList;
 		
-		for(int i = 0; i < maxForClearingMemberIDs; i++) {
-			for(int j = 0; j < maxForStockIDs; j++) {
-				balance = generateOpeningStockBalance(i, j);
-				//OpeningStockBalance temp = new OpeningStockBalance()
-				//temp.setCMID, .setStockID, .setBalance
-				//openingStockBalanceList.add(temp);
+		for(int i = 1; i < maxForClearingMemberIDs; i++) {
+			for(int j = 1; j < maxForStockIDs; j++) {
+				balance = generateOpeningStockBalance();
+				openingStockBalanceDAO.addOpeningStockBalance(i, j, balance);
 			}
 		}
-		
-		//DAO.add in for loop
 	}
 	
-	private int generateOpeningStockBalance(int clearingMemberID, int stockID){
+	private int generateOpeningStockBalance(){
 		return minForStockQuantity + (randomGenerator.nextInt() * (maxForStockQuantity - minForStockQuantity));
 	}
 	
 	public void generateOpeningFundBalances() {
-		double balance = 0;
+		double balance = 0, generatedBalance = 0;
 		
-		for(int i = 0; i < maxForClearingMemberIDs; i++) {
-			balance = generateOpeningFundBalance(i);
-			/*
-			 * list.get(i).setOpeningBalance(balance); 
-			 */
+		for(int i = 1; i < maxForClearingMemberIDs; i++) {
+			df.setRoundingMode(RoundingMode.DOWN);
+			generatedBalance = generateOpeningFundBalance(i);
+			
+			balance = new Double(df.format(generatedBalance));
+			clearingMemberDAO.updateClearingMemberFundBalance(i, balance);
 		}
-		
-		
 	}
 	
 	private double generateOpeningFundBalance(int clearingMemberID) {
 		return ThreadLocalRandom.current().nextDouble(-10000000, 10000000);
+	}
+	
+	public void generateStockBorrowingRates() {
+		df.setRoundingMode(RoundingMode.DOWN);
+		double borrowingRate = 0, generatedBorrowingRate = 0;
+		
+		for(int i = 1; i < maxForStockIDs; i++) {
+			generatedBorrowingRate = generateStockBorrowingRate();
+			
+			borrowingRate = new Double(df.format(generatedBorrowingRate));
+			stockDAO.updateStockBorrowingRate(i, borrowingRate);
+		}
+	}
+	
+	private double generateStockBorrowingRate() {
+		return ThreadLocalRandom.current().nextDouble(1, 10);
+	}
+	
+	public void generateCorporateActions() {
+		int corporateAction = 0;
+		
+		for(int i = 1; i < maxForStockIDs; i++) {
+			corporateAction = generateCorporateAction();
+			stockDAO.updateStockCorporateAction(i, corporateAction);
+		}
+	}
+	
+	private int generateCorporateAction() {
+		return randomGenerator.nextInt(maxForCorporateActions);
+	}
+	
+	public void generateInterestRateForFunds() {
+		df.setRoundingMode(RoundingMode.DOWN);
+		double generatedFundsBorrowingRate = ThreadLocalRandom.current().nextDouble(1, 20);
+		double fundsBorrowingRate = new Double(df.format(generatedFundsBorrowingRate));
+		clearingHouse.setFundBorrowingRate(fundsBorrowingRate);
 	}
 }
