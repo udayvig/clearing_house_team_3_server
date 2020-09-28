@@ -18,8 +18,8 @@ public class ClearingMemberDAOImpl implements ClearingMemberDAO {
 	@Override
 	public void addClearingMember(String clearingMemberName, int clearingMemberOpeningFundBalance) {
 		// TODO Auto-generated method stub
-		String addClearingMemberQuery = "INSERT INTO clearing_member(opening_fund_balance, clearing_member_name) VALUES (?, ?)";
-		jdbcTemplateObject.update(addClearingMemberQuery, clearingMemberOpeningFundBalance, clearingMemberName);
+		String addClearingMemberQuery = "INSERT INTO clearing_member(clearing_member_name, opening_fund_balance) VALUES (?, ?)";
+		jdbcTemplateObject.update(addClearingMemberQuery, clearingMemberName, clearingMemberOpeningFundBalance);
 		System.out.println("Created Record Name = " + clearingMemberName + " Balance = " + clearingMemberOpeningFundBalance);
 	}
 
