@@ -6,10 +6,14 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.citi.bean.Trade;
+import com.citi.dao.ClearingMemberDAO;
+import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAOImpl;
 
+@Component
 public class RandomDataGeneration {
 	
 	private Random randomGenerator = new Random();
@@ -19,10 +23,16 @@ public class RandomDataGeneration {
 	@Autowired
 	private TradeDAOImpl tradeDAO;
 	
+	@Autowired
+	private ClearingMemberDAO clearingMemberDAO;
+	
+	@Autowired
+	private StockDAO stockDAO;
+	
 	//Trades
 	int minForIDs = 1;
-	int maxForStockIDs = 6; //getStockIDList().size + 1
-	int maxForClearingMemberIDs = 6; //getCMIDList().size + 1
+	int maxForStockIDs = /*stockDAO.getAllStocksList().size() + 1;*/ 6;
+	int maxForClearingMemberIDs = /*clearingMemberDAO.getAllClearingMembers().size() + 1;*/ 6;
 	int minForQuantity = 10000;
 	int maxForQuantity = 500001;
 	
@@ -30,7 +40,7 @@ public class RandomDataGeneration {
 	int minForStockQuantity = 10000;
 	int maxForStockQuantity = 500001;
 	
-	private List<Trade> generateTrades(int numberOfTrades){
+	public List<Trade> generateTrades(int numberOfTrades){
 		List<Trade> trades = new ArrayList<>();
 		for(int i = 0; i < numberOfTrades; i++) {
 			Trade trade = generateTrade();
@@ -57,6 +67,7 @@ public class RandomDataGeneration {
 		trade.setQuantity(quantity);
 		trade.setPrice(price);
 		
+		tradeDAO.addTrade(buyerClearingMemberID, sellerClearingMemberID, price, quantity, stockID);
 		return trade;
 	}
 	
