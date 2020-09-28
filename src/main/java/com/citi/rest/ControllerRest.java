@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.citi.displaybeans.FundObligationDisplay;
 import com.citi.displaybeans.TradeDisplay;
 import com.citi.service.ClearingHouseService;
+import com.citi.servicebeans.FundObligation;
 
 
 @RestController
@@ -21,6 +23,9 @@ public class ControllerRest {
 	
 	@Autowired
 	private ClearingHouseService clearingHouseService;
+	
+	@Autowired
+	private FundObligation fundObligation;
 
 	@RequestMapping(produces = MediaType.TEXT_HTML, method = RequestMethod.GET, value = "")
 	@ResponseBody
@@ -72,8 +77,8 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/fund-obligation")
 	@ResponseBody
-	public String fundObligation() {
-		return "Fund Obligation is: 500 USD";
+	public List<FundObligationDisplay> fundObligation() {
+		return fundObligation.getFundObligationDisplayList();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/post-corporate-action-stock-obligation")
