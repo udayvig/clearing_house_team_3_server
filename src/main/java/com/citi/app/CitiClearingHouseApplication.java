@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.citi.config.ProjectConfig;
 import com.citi.dao.TradeDAO;
 import com.citi.dao.TradeDAOImpl;
+import com.citi.datageneration.RandomDataGeneration;
 
 @SpringBootApplication
 @Configuration
@@ -21,7 +22,9 @@ public class CitiClearingHouseApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context=SpringApplication.run(ProjectConfig.class, args);
+		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 		
+		rdg.generateTrades(10);
 	}
 
 }

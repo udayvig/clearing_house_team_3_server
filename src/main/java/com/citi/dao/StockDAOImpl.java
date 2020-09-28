@@ -98,7 +98,11 @@ public class StockDAOImpl implements StockDAO {
 
 		System.out.println("Stock Name for stock deleted");
 		
-		
+		String autoIncrementCurrentQuery = "SELECT MAX(stock_id) AS max FROM stock";
+		int resetID = jdbcTemplateObject.queryForObject(autoIncrementCurrentQuery, Integer.class) + 1;
+		String autoIncrementResetQuery = "ALTER TABLE stock AUTO_INCREMENT = ?";
+		jdbcTemplateObject.update(autoIncrementResetQuery, resetID);
+		System.out.println("Auto-increment reset complete: " + resetID);
 	}
 
 	

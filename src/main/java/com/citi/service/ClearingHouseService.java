@@ -32,7 +32,7 @@ public class ClearingHouseService {
 	@Autowired
 	private OpeningStockBalanceDAO openingStockBalanceDAO;
 	
-	private List<Trade> tradeList = tradeDAO.getAllTrades();
+	//private List<Trade> tradeList = tradeDAO.getAllTrades();
 	
 	public List<TradeDisplay> getTradeBook(){
 		List<Trade> tradeList = tradeDAO.getAllTrades();
