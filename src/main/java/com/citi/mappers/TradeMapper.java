@@ -17,6 +17,7 @@ public class TradeMapper implements RowMapper<Trade> {
 		trade.setQuantity(rs.getInt("quantity"));
 		trade.setSellerClearingMemberID(rs.getInt("selling_clearing_member"));
 		trade.setStockID(rs.getInt("stock_id"));
+		trade.setTradeID(rs.getInt("trade_id"));
 		
 		return trade;
 	}

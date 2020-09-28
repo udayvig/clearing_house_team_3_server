@@ -2,8 +2,6 @@ package com.citi.dao;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,6 +21,15 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 //		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 //	}
 
+	@Override
+	public List<OpeningStockBalance> getAllOpeningStockBalances() {
+		// TODO Auto-generated method stub
+		String SQL = "select * from opening_stock_balance";
+		List<OpeningStockBalance> openingStockBalances = jdbcTemplateObject.query(SQL, new OpeningStockBalanceMapper());
+
+		return openingStockBalances;
+	}
+		
 	@Override
 	public OpeningStockBalance getOpeningStockBalance(int clearingMemberID, int stockID) {
 		// TODO Auto-generated method stub

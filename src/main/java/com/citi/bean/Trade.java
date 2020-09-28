@@ -59,4 +59,8 @@ public class Trade {
 	public void setSellerClearingMemberID(int sellerClearingMemberID) {
 		this.sellerClearingMemberID = sellerClearingMemberID;
 	}
+	
+	public double getTradeValue() {
+		return (double)(this.quantity * this.price); 
+	}
 }

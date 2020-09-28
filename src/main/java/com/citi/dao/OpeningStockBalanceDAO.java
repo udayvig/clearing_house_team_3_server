@@ -6,6 +6,8 @@ import com.citi.bean.OpeningStockBalance;
 
 public interface OpeningStockBalanceDAO {
 	
+	List<OpeningStockBalance> getAllOpeningStockBalances(); 
+	
 	OpeningStockBalance getOpeningStockBalance(int clearingMemberID, int stockID);
 	
 	List<OpeningStockBalance> getOpeningStockBalanceByClearingMemberID(int clearingMemberID);

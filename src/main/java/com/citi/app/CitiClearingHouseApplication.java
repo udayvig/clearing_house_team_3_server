@@ -1,6 +1,4 @@
-package com.example.demo;
-
-import java.util.List;
+package com.citi.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -10,10 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.citi.bean.Stock;
 import com.citi.config.ProjectConfig;
-import com.citi.dao.StockDAO;
-import com.citi.dao.StockDAOImpl;
+import com.citi.dao.TradeDAO;
+import com.citi.dao.TradeDAOImpl;
 
 @SpringBootApplication
 @Configuration
@@ -25,8 +22,10 @@ public class CitiClearingHouseApplication {
 	public static void main(String[] args) {
 		//SpringApplication.run(CitiClearingHouseApplication.class, args);
 		ApplicationContext context=SpringApplication.run(ProjectConfig.class, args);
-		StockDAO test = context.getBean(StockDAOImpl.class);
+		//StockDAO test = context.getBean(StockDAOImpl.class);
 		
+		//TradeDAO trade = context.getBean(TradeDAOImpl.class);
+		//trade.addTrade(1, 2, 300.123, 4, 1);
 		//test.addStock("trial3", 0.8, 0);
 		
 		/*
