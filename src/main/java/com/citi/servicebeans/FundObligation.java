@@ -28,7 +28,7 @@ public class FundObligation {
 	public void initFundObligation() {
 		clearingMembers = clearingMemberDAOImpl.getAllClearingMembers();
 		fundObligation = new HashMap<>();
-		for(ClearingMember clearingMember: clearingMembers) {
+		for(ClearingMember clearingMember : clearingMembers) {
 			fundObligation.put(clearingMember.getClearingMemberID(), clearingMembers.get(clearingMember.getClearingMemberID() - 1).getClearingMemberOpeningFundBalance());
 		}
 	}
@@ -41,7 +41,7 @@ public class FundObligation {
 	public void setFundObligation() {
 		initFundObligation();
 		List<Trade> allTrades = tradeDAOImpl.getAllTrades();
-		for(Trade trade:allTrades) {
+		for(Trade trade : allTrades) {
 			int buyerClearingMemberID = trade.getBuyerClearingMemberID();
 			int sellerClearingMemberID = trade.getSellerClearingMemberID();
 			double tradeValue = trade.getTradeValue();
