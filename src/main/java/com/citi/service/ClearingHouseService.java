@@ -32,6 +32,8 @@ public class ClearingHouseService {
 	@Autowired
 	private OpeningStockBalanceDAO openingStockBalanceDAO;
 	
+	private List<Trade> tradeList = tradeDAO.getAllTrades();
+	
 	public List<TradeDisplay> getTradeBook(){
 		List<Trade> tradeList = tradeDAO.getAllTrades();
 		List<TradeDisplay> tradeBook = new ArrayList<>();
@@ -60,14 +62,17 @@ public class ClearingHouseService {
 		return tradeBook;
 	}
 	
-	public int getTradeVolume() {
+	public HashMap<String, Integer> getTradeVolume() {
 		List<Trade> tradeList = tradeDAO.getAllTrades();
+		HashMap<String, Integer> map = new HashMap<>();
+		
 		int volume = 0;
 		for(Trade trade : tradeList) {
 			volume += trade.getQuantity();
 		}
 		
-		return volume;
+		map.put("Trade Volume", volume);
+		return map;
 	}
 	
 	public HashMap<String, HashMap<String, Double>> getOpeningBalance(){
