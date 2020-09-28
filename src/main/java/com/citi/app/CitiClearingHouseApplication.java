@@ -20,39 +20,7 @@ import com.citi.dao.TradeDAOImpl;
 public class CitiClearingHouseApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(CitiClearingHouseApplication.class, args);
 		ApplicationContext context=SpringApplication.run(ProjectConfig.class, args);
-		//StockDAO test = context.getBean(StockDAOImpl.class);
-		
-		//TradeDAO trade = context.getBean(TradeDAOImpl.class);
-		//trade.addTrade(1, 2, 300.123, 4, 1);
-		//test.addStock("trial3", 0.8, 0);
-		
-		/*
-		 * List<Stock> stockList=test.getAllStocksList(); 
-		 * for(Stock stock : stockList){
-		 * System.out.println(stock.getStockID());
-		 * System.out.println(stock.getStockName());
-		 * System.out.println(stock.getBorrowingRate());
-		 * System.out.println(stock.getCorporateAction()); 
-		 * System.out.println(" ");
-		 *  }
-		 */		
-		
-		/*
-		 * Stock stock = test.getStock(1); System.out.println(stock.getStockID());
-		 * System.out.println(stock.getStockName());
-		 * System.out.println(stock.getBorrowingRate());
-		 * System.out.println(stock.getCorporateAction());
-		 */
-		
-		//test.updateStockBorrowingRate(1, 0.6 );
-		
-		//test.updateStockCorporateAction(2, 1);
-		
-		//test.updateStockName(5, "Flipkart");
-		
-		//test.deleteStock(6);
 		
 	}
 
