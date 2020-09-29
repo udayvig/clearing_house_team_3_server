@@ -14,8 +14,8 @@ public class ClearingMemberMapper implements RowMapper<ClearingMember>{
 			// TODO Auto-generated method stub
 			ClearingMember clearingMember = new ClearingMember();
 			clearingMember.setClearingMemberID(rs.getInt("clearing_member_id"));
-			clearingMember.setClearingMemberOpeningFundBalance(rs.getInt("opening_fund_balance"));
 			clearingMember.setClearingMemberName(rs.getString("clearing_member_name"));
+			clearingMember.setClearingMemberOpeningFundBalance(rs.getInt("opening_fund_balance"));
 			
 			return clearingMember;
 

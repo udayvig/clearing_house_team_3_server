@@ -19,4 +19,6 @@ public interface TradeDAO {
 	List<Trade> getAllTrades();
 	
 	void deleteTrade(int tradeID);
+	
+	void deleteAllTrades();
 }

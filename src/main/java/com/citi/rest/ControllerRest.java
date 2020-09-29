@@ -6,22 +6,41 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.citi.bean.ClearingMember;
+import com.citi.displaybeans.FundObligationDisplay;
+import com.citi.displaybeans.OpeningBalanceDisplay;
+import com.citi.displaybeans.StockObligationDisplay;
 import com.citi.displaybeans.TradeDisplay;
 import com.citi.service.ClearingHouseService;
+import com.citi.service.ClearingMemberService;
+import com.citi.servicebeans.FundObligation;
+import com.citi.servicebeans.StockObligation;
 
 
 @RestController
+//@RequestMapping(value = "/clearing-and-settlement")
+@CrossOrigin(origins = "*") 
 public class ControllerRest {
 	
 	@Autowired
 	private ClearingHouseService clearingHouseService;
+	
+	@Autowired
+	private ClearingMemberService clearingMemberService;
+	
+	@Autowired
+	private StockObligation stockObligation;
 
+	@Autowired
+	private FundObligation fundObligation;
+	
 	@RequestMapping(produces = MediaType.TEXT_HTML, method = RequestMethod.GET, value = "")
 	@ResponseBody
 	public String index() {
@@ -42,13 +61,13 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/interest-rate")
 	@ResponseBody
-	public String interestRate() {
-		return "Interest Rate is: 500";
+	public HashMap<String, Double> interestRate() {
+		return clearingHouseService.getFundInterestRate();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/opening-balance")
 	@ResponseBody
-	public HashMap<String, HashMap<String, Double>> openingBalance() {
+	public List<OpeningBalanceDisplay> openingBalance() {
 		return clearingHouseService.getOpeningBalance();
 	}
 	
@@ -66,14 +85,15 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/stock-obligation")
 	@ResponseBody
-	public String stockObligation() {
-		return "Stock Obligations are: 50 USD, 25 USD, ....";
+	public List<StockObligationDisplay> stockObligation() {
+		return stockObligation.generateStockObligationReport();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/fund-obligation")
 	@ResponseBody
-	public String fundObligation() {
-		return "Fund Obligation is: 500 USD";
+	public List<FundObligationDisplay> fundObligation() {
+		fundObligation.setFundObligationDisplayList();
+		return fundObligation.getFundObligationDisplayList();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/post-corporate-action-stock-obligation")
@@ -84,44 +104,44 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
 	@ResponseBody
-	public String cmOpeningFundBalance(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " has opening funds: 500k USD, 125k USD, ...." ;
+	public ClearingMember cmOpeningFundBalance(@RequestParam("cmid") int id) {
+		return clearingMemberService.getOpeningFundBalance(id);
 	}
 	
-	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-closing-fund-balance")
-	@ResponseBody
-	public String cmClosingFundBalance(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " has closing funds: 5M USD, 12k USD, ...." ;
-	}
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-closing-fund-balance")
+//	@ResponseBody
+//	public String cmClosingFundBalance(@RequestParam("cmid") int id) {
+//		return "CM with id = " + id + " has closing funds: 5M USD, 12k USD, ....";
+//	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-stock-balance")
 	@ResponseBody
-	public String cmOpeningStockBalance(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " has opening stocks: 5k USD, 15k USD, ...." ;
+	public OpeningBalanceDisplay cmOpeningStockBalance(@RequestParam("cmid") int id) {
+		return clearingMemberService.getOpeningStockBalance(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-buy-tradebook")
 	@ResponseBody
-	public String cmBuyTradebook(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's buy tradebook: ...." ;
+	public List<TradeDisplay> cmBuyTradebook(@RequestParam("cmid") int id) {
+		return clearingMemberService.getCmBuyTradebook(id) ;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-sell-tradebook")
 	@ResponseBody
-	public String cmSellTradebook(@RequestParam("cmid") int id) {
-		return "CM id = " + id + " 's sell tradebook: ...." ;
+	public List<TradeDisplay> cmSellTradebook(@RequestParam("cmid") int id) {
+		return clearingMemberService.getCmSellTradebook(id) ;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-obligation")
 	@ResponseBody
-	public String cmStockObligation(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's stock obligations: 125k USD, 50k USD, ...." ;
+	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") int id) {
+		return stockObligation.generateClearingMemberStockObligationReport(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-fund-obligation")
 	@ResponseBody
-	public String cmFundObligation(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's fund obligation: 225k USD" ;
+	public double cmFundObligation(@RequestParam("cmid") int id) {
+		return fundObligation.getClearingMemberFundObligation(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-cost-of-settlement")

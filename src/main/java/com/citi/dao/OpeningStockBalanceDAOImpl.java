@@ -37,7 +37,7 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		OpeningStockBalance openingStockBalance = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { clearingMemberID, stockID }, new OpeningStockBalanceMapper());
 
-		System.out.println("openingBlanceID: " + openingStockBalance.getOpeningStockBalanceID());
+		//System.out.println("openingBlanceID: " + openingStockBalance.getOpeningStockBalanceID());
 
 		return openingStockBalance;
 	}
@@ -51,7 +51,7 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		List<OpeningStockBalance> openingStockBalances = jdbcTemplateObject.query(SQL,
 				new Object[] { clearingMemberID }, new OpeningStockBalanceMapper());
 
-		System.out.println(openingStockBalances);
+		//System.out.println(openingStockBalances);
 
 		return openingStockBalances;
 	}
@@ -63,7 +63,7 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		String SQL = "insert into opening_stock_balance (clearing_member_id, stock_id, quantity) values (?, ?, ?)";
 
 		jdbcTemplateObject.update(SQL, clearingMemberID, stockID, quantity);
-		System.out.println("Created openingStockBalnce record");
+		//System.out.println("Created openingStockBalnce record");
 
 		return;
 
@@ -77,7 +77,7 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 
 		jdbcTemplateObject.update(SQl, quantity, openingStockBalanceID);
 
-		System.out.println("openingStockBalance updated");
+		//System.out.println("openingStockBalance updated");
 
 		return;
 

@@ -1,5 +1,8 @@
 package com.citi.bean;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ClearingHouse {
 
 	private String name;
