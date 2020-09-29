@@ -77,4 +77,10 @@ public class TradeDAOImpl implements TradeDAO {
 		jdbcTemplateObject.update(SQL, tradeID);
 		//System.out.println("Deleted.");
 	}
+	
+	@Override
+	public void deleteAllTrades() {
+		String SQL = "truncate trade";
+		jdbcTemplateObject.update(SQL);
+	}
 }

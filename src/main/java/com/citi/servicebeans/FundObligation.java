@@ -1,5 +1,6 @@
 package com.citi.servicebeans;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +12,16 @@ import com.citi.bean.ClearingMember;
 import com.citi.bean.Trade;
 import com.citi.dao.ClearingMemberDAOImpl;
 import com.citi.dao.TradeDAOImpl;
+import com.citi.displaybeans.FundObligationDisplay;
 
 @Component
 public class FundObligation {
+	private HashMap<Integer, Double> openingBalance;
 	private HashMap<Integer, Double> fundObligation;
-	private HashMap<String, Double> fundObligationDisplay;
-//	private HashMap<Integer, Double> fundShortage;
-//	private HashMap<String, Double> fundShortageDisplay;
-	
+	private List<FundObligationDisplay> fundObligationDisplayList;
+	private HashMap<Integer, Double> fundShortage;
+	private List<FundObligationDisplay> fundShortageDisplayList;
+
 	@Autowired
 	ClearingMemberDAOImpl clearingMemberDAOImpl;
 	
@@ -35,21 +38,22 @@ public class FundObligation {
 		}
 	}
 	
-//	public void initFundShortage() {
-//		clearingMembers = clearingMemberDAOImpl.getAllClearingMembers();
-//		fundShortage = new HashMap<>();
-//		for(ClearingMember clearingMember : clearingMembers) {
-//			fundShortage.put(clearingMember.getClearingMemberID(), clearingMembers.get(clearingMember.getClearingMemberID() - 1).getClearingMemberOpeningFundBalance());
-//		}
-//	}
+	public void initFundShortage() {
+		clearingMembers = clearingMemberDAOImpl.getAllClearingMembers();
+		openingBalance = new HashMap<>();
+		for(ClearingMember clearingMember : clearingMembers) {
+			openingBalance.put(clearingMember.getClearingMemberID(), clearingMembers.get(clearingMember.getClearingMemberID() - 1).getClearingMemberOpeningFundBalance());
+		}
+	}
 	public HashMap<Integer, Double> getFundObligation() {
 		return fundObligation;
 	}
-	public HashMap<String, Double> getFundObligationDisplay() {
-		return fundObligationDisplay;
+	public List<FundObligationDisplay> getFundShortageDisplayList() {
+		return fundShortageDisplayList;
 	}
+	
 	public void setFundObligation() {
-		//initFundObligation();
+		initFundObligation();
 		List<Trade> allTrades = tradeDAOImpl.getAllTrades();
 		for(Trade trade : allTrades) {
 			int buyerClearingMemberID = trade.getBuyerClearingMemberID();
@@ -59,18 +63,54 @@ public class FundObligation {
 			fundObligation.replace(sellerClearingMemberID, fundObligation.get(sellerClearingMemberID) + tradeValue);
 		}
 	}
-	public void setFundObligationDisplay() {
-		fundObligationDisplay = new HashMap<>();
+	
+	public void setFundObligationDisplayList() {
 		setFundObligation();
+		fundObligationDisplayList = new ArrayList<>();
 		for(Map.Entry entry : fundObligation.entrySet()) {
+			FundObligationDisplay fundObligationDisplay = new FundObligationDisplay();
 			String clearingMemberName = clearingMemberDAOImpl.getClearingMember((Integer)(entry.getKey())).getClearingMemberName();
-			fundObligationDisplay.put(clearingMemberName, (Double)entry.getValue());
+			fundObligationDisplay.setClearingMemberName(clearingMemberName);
+			fundObligationDisplay.setFundObligationAmount((Double)entry.getValue());
+			fundObligationDisplayList.add(fundObligationDisplay);
 		}
 	}
-//	public void setFundShortage() {
-//		initFundShortage();
-//		for(Map.Entry entry : fundObligation.entrySet()) {
-//			
-//		}
-//	}
+
+	public List<FundObligationDisplay> getFundObligationDisplayList() {
+		return fundObligationDisplayList;
+	}
+
+	public HashMap<Integer, Double> getFundShortage() {
+		return fundShortage;
+	}	
+	
+	public void setFundShortage() {
+		initFundShortage();
+		fundShortage = new HashMap<>();
+		for(Map.Entry entry : fundObligation.entrySet()) {
+			double shortage = (openingBalance.get(entry.getKey()) + (Double)entry.getValue()) * -1;
+			if(shortage > 0)
+				fundShortage.put((Integer)entry.getKey(), shortage);
+			else
+				fundShortage.put((Integer)entry.getKey(), 0.0);
+		}
+	}
+	
+	public void setFundShortageDisplayList() {
+		setFundObligation();
+		setFundShortage();
+		fundShortageDisplayList = new ArrayList<>();
+		for(Map.Entry entry : fundShortage.entrySet()) {
+			FundObligationDisplay fundShortageDisplay = new FundObligationDisplay();
+			String clearingMemberName = clearingMemberDAOImpl.getClearingMember((Integer)(entry.getKey())).getClearingMemberName();
+			fundShortageDisplay.setClearingMemberName(clearingMemberName);
+			fundShortageDisplay.setFundObligationAmount((Double)entry.getValue());
+			fundShortageDisplayList.add(fundShortageDisplay);
+		}
+	}
+	
+	public double getClearingMemberFundObligation(int cmid) {
+		setFundObligation();
+		return this.fundObligation.get(cmid);
+	}
 }

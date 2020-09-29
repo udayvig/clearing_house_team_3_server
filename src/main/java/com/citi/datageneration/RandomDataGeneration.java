@@ -17,6 +17,7 @@ import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
 
+@Component
 public class RandomDataGeneration {
 	
 	private Random randomGenerator = new Random();
@@ -39,8 +40,8 @@ public class RandomDataGeneration {
 	
 	//Trades
 	int minForIDs = 1;
-	int maxForStockIDs = stockDAO.getAllStocksList().size() + 1;
-	int maxForClearingMemberIDs = clearingMemberDAO.getAllClearingMembers().size() + 1;
+	int maxForStockIDs = 0;
+	int maxForClearingMemberIDs = 0;
 	int minForQuantity = 10000;
 	int maxForQuantity = 100001;
 	
@@ -52,7 +53,8 @@ public class RandomDataGeneration {
 	int maxForCorporateActions = 3;
 	
 	public void initialise() {
-		
+		maxForStockIDs = stockDAO.getAllStocksList().size() + 1;
+		maxForClearingMemberIDs = clearingMemberDAO.getAllClearingMembers().size() + 1;
 	}
 	
 	public List<Trade> generateTrades(int numberOfTrades){
@@ -99,7 +101,7 @@ public class RandomDataGeneration {
 	}
 	
 	private int generateOpeningStockBalance(){
-		return minForStockQuantity + (randomGenerator.nextInt() * (maxForStockQuantity - minForStockQuantity));
+		return ThreadLocalRandom.current().nextInt(-10000, 10001);
 	}
 	
 	public void generateOpeningFundBalances() {
@@ -139,7 +141,7 @@ public class RandomDataGeneration {
 		
 		for(int i = 1; i < maxForStockIDs; i++) {
 			corporateAction = generateCorporateAction();
-			stockDAO.updateStockCorporateAction(i, corporateAction);
+			//stockDAO.updateStockCorporateAction(i, corporateAction);
 		}
 	}
 	

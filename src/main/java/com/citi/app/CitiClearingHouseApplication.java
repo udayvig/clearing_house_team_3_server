@@ -9,8 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.citi.config.ProjectConfig;
-import com.citi.servicebeans.FundObligation;
-import com.citi.servicebeans.StockObligation;
+import com.citi.datageneration.RandomDataGeneration;
+import com.citi.service.ClearingHouseService;
+import com.citi.service.ClearingMemberService;
 
 @SpringBootApplication
 @Configuration
@@ -21,21 +22,28 @@ public class CitiClearingHouseApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context=SpringApplication.run(ProjectConfig.class, args);
-//		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
-//		
+		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
+//		rdg.initialise();
 //		rdg.generateTrades(10);
 		
-		StockObligation stockObligation = context.getBean(StockObligation.class);
-		FundObligation fundObligation = context.getBean(FundObligation.class);
+//		rdg.generateOpeningStockBalances();
+//		StockObligation stockObligation = context.getBean(StockObligation.class);
+//		FundObligation fundObligation = context.getBean(FundObligation.class);
+//		
+//		stockObligation.initialise();
+//		fundObligation.initFundObligation();
+//		
+//		stockObligation.setStockObligation();
+//		fundObligation.setFundObligationDisplay();
+//		
+//		System.out.println(stockObligation.getStockObligationDisplay());
+//		System.out.println(fundObligation.getFundObligationDisplay());
 		
-		stockObligation.initialise();
-		fundObligation.initFundObligation();
+		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
+		cls.initialise();
 		
-		stockObligation.setStockObligation();
-		fundObligation.setFundObligationDisplay();
-		
-		System.out.println(stockObligation.getStockObligationDisplay());
-		System.out.println(fundObligation.getFundObligationDisplay());
+		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
+		cms.initialise();
 	}
 
 }

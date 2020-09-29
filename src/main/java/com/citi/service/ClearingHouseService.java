@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.citi.bean.ClearingHouse;
 import com.citi.bean.ClearingMember;
 import com.citi.bean.OpeningStockBalance;
 import com.citi.bean.Stock;
@@ -15,7 +16,9 @@ import com.citi.dao.ClearingMemberDAO;
 import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
+import com.citi.displaybeans.OpeningBalanceDisplay;
 import com.citi.displaybeans.TradeDisplay;
+import com.citi.servicebeans.StockObligation;
 
 @Service
 public class ClearingHouseService {
@@ -32,10 +35,32 @@ public class ClearingHouseService {
 	@Autowired
 	private OpeningStockBalanceDAO openingStockBalanceDAO;
 	
-	//private List<Trade> tradeList = tradeDAO.getAllTrades();
+	@Autowired
+	private ClearingHouse clearingHouse;
+	
+	private List<Trade> tradeList;
+	private List<ClearingMember> clearingMembers;
+	private List<Stock> stocks;
+	
+	private HashMap<Integer, String> clearingMemberNames = new HashMap<>();
+	private HashMap<Integer, String> stockNames = new HashMap<>();
+	
+	public void initialise() {
+		System.out.println("Initialising CHS");
+		tradeList = tradeDAO.getAllTrades();
+		clearingMembers = clearingMemberDAO.getAllClearingMembers();
+		stocks = stockDAO.getAllStocksList();
+		
+		for(ClearingMember clearingMember : clearingMembers) {
+			clearingMemberNames.put(clearingMember.getClearingMemberID(), clearingMember.getClearingMemberName());
+		}
+		
+		for(Stock stock : stocks) {
+			stockNames.put(stock.getStockID(), stock.getStockName());
+		}
+	}
 	
 	public List<TradeDisplay> getTradeBook(){
-		List<Trade> tradeList = tradeDAO.getAllTrades();
 		List<TradeDisplay> tradeBook = new ArrayList<>();
 		
 		for(Trade trade : tradeList) {
@@ -44,9 +69,9 @@ public class ClearingHouseService {
 			int sellerClearingMemberID = trade.getSellerClearingMemberID();
 			int stockID = trade.getStockID();
 			
-			String buyerName = clearingMemberDAO.getClearingMember(buyerClearingMemberID).getClearingMemberName();
-			String sellerName = clearingMemberDAO.getClearingMember(sellerClearingMemberID).getClearingMemberName();
-			String stockName = stockDAO.getStock(stockID).getStockName();
+			String buyerName = clearingMemberNames.get(buyerClearingMemberID);
+			String sellerName = clearingMemberNames.get(sellerClearingMemberID);
+			String stockName = stockNames.get(stockID);
 			
 			tradeDisplay.setBuyerName(buyerName);
 			tradeDisplay.setPrice(trade.getPrice());
@@ -63,7 +88,6 @@ public class ClearingHouseService {
 	}
 	
 	public HashMap<String, Integer> getTradeVolume() {
-		List<Trade> tradeList = tradeDAO.getAllTrades();
 		HashMap<String, Integer> map = new HashMap<>();
 		
 		int volume = 0;
@@ -71,14 +95,12 @@ public class ClearingHouseService {
 			volume += trade.getQuantity();
 		}
 		
-		map.put("Trade Volume", volume);
+		map.put("TradeVolume", volume);
 		return map;
 	}
 	
-	public HashMap<String, HashMap<String, Double>> getOpeningBalance(){
+	public List<OpeningBalanceDisplay> getOpeningBalance(){
 		HashMap<String, HashMap<String, Double>> openingBalances = new HashMap<>();
-		
-		List<ClearingMember> clearingMembers = clearingMemberDAO.getAllClearingMembers();
 		
 		for(ClearingMember cm : clearingMembers) {
 			HashMap<String, Double> map = new HashMap<>();
@@ -90,23 +112,46 @@ public class ClearingHouseService {
 					.getOpeningStockBalanceByClearingMemberID(cm.getClearingMemberID());
 			
 			for(OpeningStockBalance balance : balanceList) {
-				String stockName = stockDAO.getStock(balance.getStockID()).getStockName();
+				String stockName = stockNames.get(balance.getStockID());
 				map.put(stockName, (double)(balance.getQuantity()));
 			}
 			
 			openingBalances.put(clearingMemberName, map);
 		}
 		
-		return openingBalances;
+		System.out.println(openingBalances);
+		
+		List<OpeningBalanceDisplay> openingBalanceDisplayList = new ArrayList<>();
+		for(String cmName : openingBalances.keySet()) {
+			OpeningBalanceDisplay openingBalanceDisplay = new OpeningBalanceDisplay();
+			openingBalanceDisplay.setClearingMemberName(cmName);
+			
+			openingBalanceDisplay.setAmazon(openingBalances.get(cmName).get("Amazon"));
+			openingBalanceDisplay.setApple(openingBalances.get(cmName).get("Apple"));
+			openingBalanceDisplay.setGoogle(openingBalances.get(cmName).get("Google"));
+			openingBalanceDisplay.setNetflix(openingBalances.get(cmName).get("Netfilx"));
+			openingBalanceDisplay.setFacebook(openingBalances.get(cmName).get("Facebook"));
+			openingBalanceDisplay.setCash(openingBalances.get(cmName).get("Funds"));
+			
+			openingBalanceDisplayList.add(openingBalanceDisplay);
+		}
+		
+		return openingBalanceDisplayList;
 	}
 	
 	public HashMap<String, Double> getStockBorrowingRate(){
 		HashMap<String, Double> map = new HashMap<>();
-		List<Stock> stocks = stockDAO.getAllStocksList();
 		
 		for(Stock stock : stocks) {
 			map.put(stock.getStockName(), stock.getBorrowingRate());
 		}
+		
+		return map;
+	}
+	
+	public HashMap<String, Double> getFundInterestRate(){
+		HashMap<String, Double> map = new HashMap<>();
+		map.put("Interest Rate", clearingHouse.getFundBorrowingRate());
 		
 		return map;
 	}
