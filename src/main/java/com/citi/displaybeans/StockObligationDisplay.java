@@ -3,11 +3,11 @@ package com.citi.displaybeans;
 public class StockObligationDisplay {
 
 	private String name;
-	private int google;
-	private int amazon;
-	private int apple;
-	private int netflix;
-	private int facebook;
+	private double google;
+	private double amazon;
+	private double apple;
+	private double netflix;
+	private double facebook;
 
 	public String getName() {
 		return name;
@@ -17,43 +17,43 @@ public class StockObligationDisplay {
 		this.name = name;
 	}
 
-	public int getGoogle() {
+	public double getGoogle() {
 		return google;
 	}
 
-	public void setGoogle(int google) {
+	public void setGoogle(double google) {
 		this.google = google;
 	}
 
-	public int getAmazon() {
+	public double getAmazon() {
 		return amazon;
 	}
 
-	public void setAmazon(int amazon) {
+	public void setAmazon(double amazon) {
 		this.amazon = amazon;
 	}
 
-	public int getApple() {
+	public double getApple() {
 		return apple;
 	}
 
-	public void setApple(int apple) {
+	public void setApple(double apple) {
 		this.apple = apple;
 	}
 
-	public int getNetflix() {
+	public double getNetflix() {
 		return netflix;
 	}
 
-	public void setNetflix(int netfilx) {
-		this.netflix = netfilx;
+	public void setNetflix(double netflix) {
+		this.netflix = netflix;
 	}
 
-	public int getFacebook() {
+	public double getFacebook() {
 		return facebook;
 	}
 
-	public void setFacebook(int facebook) {
+	public void setFacebook(double facebook) {
 		this.facebook = facebook;
 	}
 

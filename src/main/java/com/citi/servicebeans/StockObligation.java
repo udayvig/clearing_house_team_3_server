@@ -23,6 +23,8 @@ public class StockObligation {
 	private HashMap<String, HashMap<String, Integer>> stockObligationDisplay = new HashMap<>();
 	private HashMap<Integer, HashMap<Integer, Integer>> stockShortage = new HashMap<>();
 	private HashMap<String, HashMap<String, Integer>> stockShortageDisplay = new HashMap<>();
+	private HashMap<Integer, HashMap<Integer, Double>> stockObligationPostCorporateAction = new HashMap<>();
+	private HashMap<String, HashMap<String, Double>> stockObligationPostCorporateActionDisplay = new HashMap<>(); 
 
 	@Autowired
 	private ClearingMemberDAO clearingMemberDAO;
@@ -60,6 +62,8 @@ public class StockObligation {
 	public HashMap<String, HashMap<String, Integer>> getStockShortageDisplay() {
 		return stockShortageDisplay;
 	}
+	
+	
 
 // Init all the lists
 	public void initialise() {
@@ -152,10 +156,50 @@ public class StockObligation {
 // System.out.println(this.stockObligationDisplay);
 
 	}
+	
+	public void setStockObligationPostCorporateAction() {
+		setStockObligation();
+		
+		for(Integer cmID : this.stockObligation.keySet()) {
+			HashMap<Integer, Double> map = new HashMap<>();
+			HashMap<String, Double> mapDisplay = new HashMap<>();
+			
+			for(Integer stockID : this.stockObligation.get(cmID).keySet()) {
+				map.put(stockID, this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
+				mapDisplay.put(accessStocks.get(stockID).getStockName(), 
+						this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
+			}
+			
+			this.stockObligationPostCorporateAction.put(cmID, map);
+			this.stockObligationPostCorporateActionDisplay.put(accessCMs.get(cmID).getClearingMemberName(), mapDisplay);
+		}
+	}
+	
+	public List<StockObligationDisplay> generateStockObligationReportPostCorporateAction() {
+		this.setStockObligationPostCorporateAction();
+
+		List<StockObligationDisplay> stockObligationPostCorporateActionDisplays = new ArrayList<>();
+
+		for (String cmName : this.stockObligationPostCorporateActionDisplay.keySet()) {
+
+			StockObligationDisplay temp = new StockObligationDisplay();
+			temp.setName(cmName);
+
+			temp.setApple(this.stockObligationPostCorporateActionDisplay.get(temp.getName()).get("Apple"));
+			temp.setGoogle(this.stockObligationPostCorporateActionDisplay.get(temp.getName()).get("Google"));
+			temp.setAmazon(this.stockObligationPostCorporateActionDisplay.get(temp.getName()).get("Amazon"));
+			temp.setNetflix(this.stockObligationPostCorporateActionDisplay.get(temp.getName()).get("Netfilx"));
+			temp.setFacebook(this.stockObligationPostCorporateActionDisplay.get(temp.getName()).get("Facebook"));
+
+			stockObligationPostCorporateActionDisplays.add(temp);
+
+		}
+
+		return stockObligationPostCorporateActionDisplays;
+	}
 
 	public List<StockObligationDisplay> generateStockObligationReport() {
 		this.setStockObligation();
-		HashMap<String, HashMap<String, Integer>> stockObligationDisplay = this.getStockObligationDisplay();
 
 		List<StockObligationDisplay> stockObligationDisplays = new ArrayList<>();
 
