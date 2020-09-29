@@ -12,23 +12,26 @@ import com.citi.config.ProjectConfig;
 import com.citi.datageneration.RandomDataGeneration;
 import com.citi.service.ClearingHouseService;
 import com.citi.service.ClearingMemberService;
+import com.citi.servicebeans.CostSettlement;
+import com.citi.servicebeans.FundObligation;
+import com.citi.servicebeans.StockObligation;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan({"com.citi.*"})
+@ComponentScan({ "com.citi.*" })
 @EnableWebMvc
 @EnableAutoConfiguration
 public class CitiClearingHouseApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext context=SpringApplication.run(ProjectConfig.class, args);
+		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 //		rdg.initialise();
 //		rdg.generateTrades(10);
-		
+
 //		rdg.generateOpeningStockBalances();
 //		StockObligation stockObligation = context.getBean(StockObligation.class);
-//		FundObligation fundObligation = context.getBean(FundObligation.class);
+		FundObligation fundObligation = context.getBean(FundObligation.class);
 //		
 //		stockObligation.initialise();
 //		fundObligation.initFundObligation();
@@ -38,12 +41,32 @@ public class CitiClearingHouseApplication {
 //		
 //		System.out.println(stockObligation.getStockObligationDisplay());
 //		System.out.println(fundObligation.getFundObligationDisplay());
-		
+
 		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
 		cls.initialise();
-		
+
 		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
 		cms.initialise();
+
+		fundObligation.initFundObligation();
+		fundObligation.setFundObligationDisplayList();
+//
+		fundObligation.initFundShortage();
+		fundObligation.setFundShortageDisplayList();
+//
+		StockObligation stockObligation = context.getBean(StockObligation.class);
+//
+		stockObligation.initialise();
+		stockObligation.generateStockObligationReport();
+		stockObligation.setShortage();
+//
+//		System.out.println(stockObligation.getStockShortage());
+//
+//		CostSettlement costSettlement = context.getBean(CostSettlement.class);
+//
+//		System.out.println(costSettlement.generateCostSettlementReport(1).toString());
+//
+//		System.out.println(fundObligation.getFundShortageDisplayList().toString());
 	}
 
 }

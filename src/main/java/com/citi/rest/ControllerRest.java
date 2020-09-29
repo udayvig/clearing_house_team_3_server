@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.bean.ClearingMember;
+import com.citi.displaybeans.CostSettlementDisplay;
 import com.citi.displaybeans.FundObligationDisplay;
 import com.citi.displaybeans.OpeningBalanceDisplay;
 import com.citi.displaybeans.StockObligationDisplay;
 import com.citi.displaybeans.TradeDisplay;
 import com.citi.service.ClearingHouseService;
 import com.citi.service.ClearingMemberService;
+import com.citi.servicebeans.CostSettlement;
 import com.citi.servicebeans.FundObligation;
 import com.citi.servicebeans.StockObligation;
 
@@ -41,11 +43,8 @@ public class ControllerRest {
 	@Autowired
 	private FundObligation fundObligation;
 	
-	@RequestMapping(produces = MediaType.TEXT_HTML, method = RequestMethod.GET, value = "")
-	@ResponseBody
-	public String index() {
-		return "Hello World!";
-	}
+	@Autowired
+	private CostSettlement costSettlement;
 	
 	@RequestMapping("*")
 	@ResponseBody
@@ -98,8 +97,8 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/post-corporate-action-stock-obligation")
 	@ResponseBody
-	public String postCorporateActionStockObligation() {
-		return "After Corporate Actions, Stock Obligations are: 150 USD, 125 USD, ....";
+	public List<StockObligationDisplay> postCorporateActionStockObligation() {
+		return stockObligation.generateStockObligationReportPostCorporateAction();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
@@ -146,13 +145,13 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-cost-of-settlement")
 	@ResponseBody
-	public String cmCostOfSettlement(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's cost of settlement: 0 USD" ;
+	public CostSettlementDisplay cmCostOfSettlement(@RequestParam("cmid") int id) {
+		return costSettlement.generateCostSettlementReport(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-corporate-action-report")
 	@ResponseBody
 	public String cmCorporateActionReport(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's post corporate action report: 625k USD, 70k USD, ...." ;
+		return "CM with id = " + id + " 's post corporate action report: 625k USD, 70k USD, ....";
 	}
 }
