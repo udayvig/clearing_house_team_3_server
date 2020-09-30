@@ -22,7 +22,6 @@ public class TradeDAOImpl implements TradeDAO {
 				+ "values (?, ?, ?, ?, ?)";
 
 		jdbcTemplateObject.update(SQL, buyerClearingMemberID, sellerClearingMemberID, stockID, quantity, price);
-		//System.out.println("Created. ");
 	}
 
 	@Override
@@ -30,7 +29,6 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "select * from trade where trade_id = ?";
 
 		Trade trade = jdbcTemplateObject.queryForObject(SQL, new Object[] { tradeID }, new TradeMapper());
-		//System.out.println("Trade ID: " + trade.getPrice());
 		return trade;
 	}
 
@@ -39,7 +37,6 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "select * from trade where stock_id = ?";
 
 		List<Trade> trades = jdbcTemplateObject.query(SQL, new Object[] { stockID }, new TradeMapper());
-		//System.out.println("Trades: " + trades);
 		return trades;
 	}
 
@@ -48,7 +45,6 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "select * from trade where buying_clearing_member = ?";
 
 		List<Trade> trades = jdbcTemplateObject.query(SQL, new Object[] { buyerClearingMemberID }, new TradeMapper());
-		//System.out.println("Trades: " + trades);
 		return trades;
 	}
 
@@ -57,7 +53,6 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "select * from trade where selling_clearing_member = ?";
 
 		List<Trade> trades = jdbcTemplateObject.query(SQL, new Object[] { sellerClearingMemberID }, new TradeMapper());
-		//System.out.println("Trades: " + trades);
 		return trades;	
 	}
 	
@@ -73,7 +68,6 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "select * from trade";
 
 		List<Trade> trades = jdbcTemplateObject.query(SQL, new TradeMapper());
-		//System.out.println("Trades: " + trades);
 		return trades;
 	}
 
@@ -82,7 +76,6 @@ public class TradeDAOImpl implements TradeDAO {
 		// TODO Auto-generated method stub
 		String SQL = "delete from trade where trade_id = ?";
 		jdbcTemplateObject.update(SQL, tradeID);
-		//System.out.println("Deleted.");
 	}
 	
 	@Override

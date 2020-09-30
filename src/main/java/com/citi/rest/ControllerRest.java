@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.bean.ClearingMember;
+import com.citi.dao.ClearingMemberDAO;
 import com.citi.displaybeans.ClearingMemberCorporateActionReportPerStockDisplay;
 import com.citi.displaybeans.CostSettlementDisplay;
 import com.citi.displaybeans.FundObligationDisplay;
@@ -29,7 +30,7 @@ import com.citi.servicebeans.StockObligation;
 
 
 @RestController
-//@RequestMapping(value = "/clearing-and-settlement")
+@RequestMapping(value = "/api")
 @CrossOrigin(origins = "*") 
 public class ControllerRest {
 	
@@ -47,6 +48,9 @@ public class ControllerRest {
 	
 	@Autowired
 	private CostSettlement costSettlement;
+	
+	@Autowired
+	private ClearingMemberDAO clearingMemberDAO;
 	
 	@RequestMapping("*")
 	@ResponseBody
@@ -109,63 +113,120 @@ public class ControllerRest {
 		return stockObligation.generateStockObligationReportPostCorporateAction();
 	}
 	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
+//	@ResponseBody
+//	public ClearingMember cmOpeningFundBalance(@RequestParam("cmid") int id) {
+//		return clearingMemberService.getOpeningFundBalance(id);
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-stock-balance")
+//	@ResponseBody
+//	public OpeningBalanceDisplay cmOpeningStockBalance(@RequestParam("cmid") int id) {
+//		return clearingMemberService.getOpeningStockBalance(id);
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-buy-tradebook")
+//	@ResponseBody
+//	public List<TradeDisplay> cmBuyTradebook(@RequestParam("cmid") int id) {
+//		return clearingMemberService.getCmBuyTradebook(id) ;
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-sell-tradebook")
+//	@ResponseBody
+//	public List<TradeDisplay> cmSellTradebook(@RequestParam("cmid") int id) {
+//		return clearingMemberService.getCmSellTradebook(id) ;
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-tradebook")
+//	@ResponseBody
+//	public List<TradeBookDisplay> cmTradebook(@RequestParam("cmid") int id) {
+//		return clearingMemberService.getCmTradebook(id) ;
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-obligation")
+//	@ResponseBody
+//	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") int id) {
+//		return stockObligation.generateClearingMemberStockObligationReport(id);
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-fund-obligation")
+//	@ResponseBody
+//	public double cmFundObligation(@RequestParam("cmid") int id) {
+//		return fundObligation.getClearingMemberFundObligation(id);
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-cost-of-settlement")
+//	@ResponseBody
+//	public CostSettlementDisplay cmCostOfSettlement(@RequestParam("cmid") int id) {
+//		return costSettlement.generateCostSettlementReport(id);
+//	}
+//	
+//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-corporate-action-report")
+//	@ResponseBody
+//	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("cmid") int id) {
+//		return stockObligation.generateClearingMemberCorporateActionReport(id);
+//	}
+	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
 	@ResponseBody
-	public ClearingMember cmOpeningFundBalance(@RequestParam("cmid") int id) {
+	public ClearingMember cmOpeningFundBalance(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return clearingMemberService.getOpeningFundBalance(id);
 	}
 	
-//	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-closing-fund-balance")
-//	@ResponseBody
-//	public String cmClosingFundBalance(@RequestParam("cmid") int id) {
-//		return "CM with id = " + id + " has closing funds: 5M USD, 12k USD, ....";
-//	}
-	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-stock-balance")
 	@ResponseBody
-	public OpeningBalanceDisplay cmOpeningStockBalance(@RequestParam("cmid") int id) {
+	public OpeningBalanceDisplay cmOpeningStockBalance(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return clearingMemberService.getOpeningStockBalance(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-buy-tradebook")
 	@ResponseBody
-	public List<TradeDisplay> cmBuyTradebook(@RequestParam("cmid") int id) {
+	public List<TradeDisplay> cmBuyTradebook(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return clearingMemberService.getCmBuyTradebook(id) ;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-sell-tradebook")
 	@ResponseBody
-	public List<TradeDisplay> cmSellTradebook(@RequestParam("cmid") int id) {
+	public List<TradeDisplay> cmSellTradebook(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return clearingMemberService.getCmSellTradebook(id) ;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-tradebook")
 	@ResponseBody
-	public List<TradeBookDisplay> cmTradebook(@RequestParam("cmid") int id) {
+	public List<TradeBookDisplay> cmTradebook(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return clearingMemberService.getCmTradebook(id) ;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-obligation")
 	@ResponseBody
-	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") int id) {
+	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return stockObligation.generateClearingMemberStockObligationReport(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-fund-obligation")
 	@ResponseBody
-	public double cmFundObligation(@RequestParam("cmid") int id) {
+	public double cmFundObligation(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return fundObligation.getClearingMemberFundObligation(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-cost-of-settlement")
 	@ResponseBody
-	public CostSettlementDisplay cmCostOfSettlement(@RequestParam("cmid") int id) {
+	public CostSettlementDisplay cmCostOfSettlement(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return costSettlement.generateCostSettlementReport(id);
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-corporate-action-report")
 	@ResponseBody
-	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("cmid") int id) {
+	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("cmid") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		return stockObligation.generateClearingMemberCorporateActionReport(id);
 	}
 }

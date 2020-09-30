@@ -34,9 +34,6 @@ public class ClearingMemberService {
 	@Autowired
 	private OpeningStockBalanceDAO openingStockBalanceDAO;
 	
-	@Autowired
-	private ClearingHouseService clearingHouseService;
-	
 	private List<ClearingMember> clearingMembers;
 	private List<Stock> stocks;
 	

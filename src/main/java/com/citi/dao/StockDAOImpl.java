@@ -22,7 +22,6 @@ public class StockDAOImpl implements StockDAO {
 		String SQL = "insert into stock (stock_name, borrowing_rate, corporate_action, corporate_action_factor) values (?, ?, ?, ?)";
 
 		jdbcTemplateObject.update(SQL, stockName, borrowingRate, corporateAction, corporateActionFactor);
-		System.out.println("Created new stock record");
 
 		return;
 	}
@@ -54,22 +53,9 @@ public class StockDAOImpl implements StockDAO {
 
 		jdbcTemplateObject.update(SQl, borrowingRate, stockID);
 
-		System.out.println("Borrowing rate for stock updated");
-
 		return;
 
 	}
-
-// @Override
-// public void updateStockCorporateAction(int stockID, String corporateAction, double corporateActionFactor) {
-// // TODO Auto-generated method stub
-// String SQl = "UPDATE stock " + "SET corporate_action = ? " + "WHERE stock_id = ?";
-//
-// jdbcTemplateObject.update(SQl, corporateAction, stockID);
-//
-// System.out.println("Corporate Action for stock updated");
-//
-// }
 
 	@Override
 	public void updateStockName(int stockID, String stockName) {
@@ -77,9 +63,6 @@ public class StockDAOImpl implements StockDAO {
 		String SQl = "UPDATE stock " + "SET stock_name = ? " + "WHERE stock_id = ?";
 
 		jdbcTemplateObject.update(SQl, stockName, stockID);
-
-		System.out.println("Stock Name for stock updated");
-
 	}
 
 	@Override
@@ -90,13 +73,10 @@ public class StockDAOImpl implements StockDAO {
 
 		jdbcTemplateObject.update(SQl, stockID);
 
-		System.out.println("Stock Name for stock deleted");
-
 		String autoIncrementCurrentQuery = "SELECT MAX(stock_id) AS max FROM stock";
 		int resetID = jdbcTemplateObject.queryForObject(autoIncrementCurrentQuery, Integer.class) + 1;
 		String autoIncrementResetQuery = "ALTER TABLE stock AUTO_INCREMENT = ?";
 		jdbcTemplateObject.update(autoIncrementResetQuery, resetID);
-		System.out.println("Auto-increment reset complete: " + resetID);
 	}
 
 	@Override
@@ -106,21 +86,14 @@ public class StockDAOImpl implements StockDAO {
 		String SQl = "UPDATE stock " + "SET corporate_action_factor = ? " + "WHERE stock_id = ?";
 
 		jdbcTemplateObject.update(SQl, corporateActionFactor, stockID);
-
-		System.out.println("Corporate Action Factor for stock updated");
-
 	}
 
 	@Override
 	public void updateStockCorporateAction(int stockID, String corporateAction, Double corporateActionFactor) {
-// TODO Auto-generated method stub
 
 		String SQl = "UPDATE stock " + "SET corporate_action = ?, corporate_action_factor = ? " + "WHERE stock_id = ?";
 
 		jdbcTemplateObject.update(SQl, corporateAction, corporateActionFactor, stockID);
-
-		System.out.println("Corporate Action for stock updated");
-
 	}
 
 }

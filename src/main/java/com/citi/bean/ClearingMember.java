@@ -3,16 +3,19 @@
  */
 package com.citi.bean;
 
-import java.util.HashMap;
-
-import org.springframework.stereotype.Component;
-
 public class ClearingMember {
 
 		private int clearingMemberID;
 		private String clearingMemberName;
 		private double clearingMemberOpeningFundBalance;
+		private String sessionToken;
 		
+		public String getSessionToken() {
+			return sessionToken;
+		}
+		public void setSessionToken(String sessionToken) {
+			this.sessionToken = sessionToken;
+		}
 		public int getClearingMemberID() {
 			return clearingMemberID;
 		}

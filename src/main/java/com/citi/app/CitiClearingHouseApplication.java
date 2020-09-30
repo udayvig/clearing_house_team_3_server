@@ -12,7 +12,6 @@ import com.citi.config.ProjectConfig;
 import com.citi.datageneration.RandomDataGeneration;
 import com.citi.service.ClearingHouseService;
 import com.citi.service.ClearingMemberService;
-import com.citi.servicebeans.CostSettlement;
 import com.citi.servicebeans.FundObligation;
 import com.citi.servicebeans.StockObligation;
 

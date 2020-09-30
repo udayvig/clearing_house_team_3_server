@@ -12,14 +12,8 @@ import com.citi.mappers.OpeningStockBalanceMapper;
 @Repository
 public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 
-	// TODO implement logger
 	@Autowired
 	private JdbcTemplate jdbcTemplateObject;
-
-//	@Autowired
-//	public void setDataSource(DataSource dataSource) {
-//		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
-//	}
 
 	@Override
 	public List<OpeningStockBalance> getAllOpeningStockBalances() {
@@ -37,8 +31,6 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		OpeningStockBalance openingStockBalance = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { clearingMemberID, stockID }, new OpeningStockBalanceMapper());
 
-		//System.out.println("openingBlanceID: " + openingStockBalance.getOpeningStockBalanceID());
-
 		return openingStockBalance;
 	}
 
@@ -51,8 +43,6 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		List<OpeningStockBalance> openingStockBalances = jdbcTemplateObject.query(SQL,
 				new Object[] { clearingMemberID }, new OpeningStockBalanceMapper());
 
-		//System.out.println(openingStockBalances);
-
 		return openingStockBalances;
 	}
 
@@ -63,7 +53,6 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		String SQL = "insert into opening_stock_balance (clearing_member_id, stock_id, quantity) values (?, ?, ?)";
 
 		jdbcTemplateObject.update(SQL, clearingMemberID, stockID, quantity);
-		//System.out.println("Created openingStockBalnce record");
 
 		return;
 
@@ -76,8 +65,6 @@ public class OpeningStockBalanceDAOImpl implements OpeningStockBalanceDAO {
 		String SQl = "UPDATE opening_stock_balance " + "SET quantity = ? " + "WHERE opening_stock_balance_id = ?";
 
 		jdbcTemplateObject.update(SQl, quantity, openingStockBalanceID);
-
-		//System.out.println("openingStockBalance updated");
 
 		return;
 

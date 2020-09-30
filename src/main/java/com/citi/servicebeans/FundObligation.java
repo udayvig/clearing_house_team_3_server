@@ -30,11 +30,18 @@ public class FundObligation {
 	
 	List<ClearingMember> clearingMembers;
 	
+	private HashMap<Integer, ClearingMember> accessCMs;
+	
 	public void initFundObligation() {
 		clearingMembers = clearingMemberDAOImpl.getAllClearingMembers();
 		fundObligation = new HashMap<>();
 		for(ClearingMember clearingMember : clearingMembers) {
 			fundObligation.put(clearingMember.getClearingMemberID(), 0.0);
+		}
+		
+		accessCMs = new HashMap<>();
+		for(ClearingMember clearingMember : clearingMembers) {
+			accessCMs.put(clearingMember.getClearingMemberID(), clearingMember);
 		}
 	}
 	
@@ -43,6 +50,11 @@ public class FundObligation {
 		openingBalance = new HashMap<>();
 		for(ClearingMember clearingMember : clearingMembers) {
 			openingBalance.put(clearingMember.getClearingMemberID(), clearingMembers.get(clearingMember.getClearingMemberID() - 1).getClearingMemberOpeningFundBalance());
+		}
+		
+		accessCMs = new HashMap<>();
+		for(ClearingMember clearingMember : clearingMembers) {
+			accessCMs.put(clearingMember.getClearingMemberID(), clearingMember);
 		}
 	}
 	public HashMap<Integer, Double> getFundObligation() {
@@ -67,9 +79,9 @@ public class FundObligation {
 	public void setFundObligationDisplayList() {
 		setFundObligation();
 		fundObligationDisplayList = new ArrayList<>();
-		for(Map.Entry entry : fundObligation.entrySet()) {
+		for(Map.Entry<Integer, Double> entry : fundObligation.entrySet()) {
 			FundObligationDisplay fundObligationDisplay = new FundObligationDisplay();
-			String clearingMemberName = clearingMemberDAOImpl.getClearingMember((Integer)(entry.getKey())).getClearingMemberName();
+			String clearingMemberName = accessCMs.get((Integer)(entry.getKey())).getClearingMemberName();
 			fundObligationDisplay.setClearingMemberName(clearingMemberName);
 			fundObligationDisplay.setFundObligationAmount((Double)entry.getValue());
 			fundObligationDisplayList.add(fundObligationDisplay);
@@ -86,8 +98,9 @@ public class FundObligation {
 	
 	public void setFundShortage() {
 		initFundShortage();
+		setFundObligation();
 		fundShortage = new HashMap<>();
-		for(Map.Entry entry : fundObligation.entrySet()) {
+		for(Map.Entry<Integer, Double> entry : fundObligation.entrySet()) {
 			double shortage = (openingBalance.get(entry.getKey()) + (Double)entry.getValue()) * -1;
 			if(shortage > 0)
 				fundShortage.put((Integer)entry.getKey(), shortage);
@@ -100,9 +113,9 @@ public class FundObligation {
 		setFundObligation();
 		setFundShortage();
 		fundShortageDisplayList = new ArrayList<>();
-		for(Map.Entry entry : fundShortage.entrySet()) {
+		for(Map.Entry<Integer, Double> entry : fundShortage.entrySet()) {
 			FundObligationDisplay fundShortageDisplay = new FundObligationDisplay();
-			String clearingMemberName = clearingMemberDAOImpl.getClearingMember((Integer)(entry.getKey())).getClearingMemberName();
+			String clearingMemberName = accessCMs.get((Integer)(entry.getKey())).getClearingMemberName();
 			fundShortageDisplay.setClearingMemberName(clearingMemberName);
 			fundShortageDisplay.setFundObligationAmount((Double)entry.getValue());
 			fundShortageDisplayList.add(fundShortageDisplay);

@@ -92,12 +92,6 @@ public class StockObligation {
 			this.stockObligationDisplay.put(clearingMember.getClearingMemberName(), innerDisplay);
 		}
 
-// System.out.println(this.stockObligation);
-// System.out.println(this.stockObligationDisplay);
-// System.out.println(this.clearingMembers);
-// System.out.println(this.stocks);
-// System.out.println(this.trades);
-
 		accessCMs = new HashMap<>();
 		for(ClearingMember clearingMember : clearingMembers) {
 			accessCMs.put(clearingMember.getClearingMemberID(), clearingMember);
@@ -152,10 +146,6 @@ public class StockObligation {
 			innerDisplay2.replace(stock.getStockName(), newSellerStockObligationValue);
 			this.stockObligationDisplay.replace(sellerCM.getClearingMemberName(), innerDisplay2);
 		}
-
-// System.out.println(this.stockObligation);
-// System.out.println(this.stockObligationDisplay);
-
 	}
 	
 	public void setStockObligationPostCorporateAction() {
@@ -207,8 +197,6 @@ public class StockObligation {
 		List<ClearingMemberCorporateActionReportPerStockDisplay> clearingMemberCorporateActionReportPerStockDisplays = new ArrayList<>();
 		
 		HashMap<Integer, Integer> inner = this.stockObligation.get(cmid);
-		HashMap<Integer, Double> innerPostCorporateAction = this.stockObligationPostCorporateAction.get(cmid);
-		
 		for(Integer stockid : inner.keySet()) {
 			ClearingMemberCorporateActionReportPerStockDisplay temp = new ClearingMemberCorporateActionReportPerStockDisplay();
 			temp.setClearingMemberID(cmid);
