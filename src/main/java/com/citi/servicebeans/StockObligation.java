@@ -15,6 +15,7 @@ import com.citi.dao.ClearingMemberDAO;
 import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
+import com.citi.displaybeans.ClearingMemberCorporateActionReportPerStockDisplay;
 import com.citi.displaybeans.StockObligationDisplay;
 
 @Component
@@ -197,6 +198,37 @@ public class StockObligation {
 
 		return stockObligationPostCorporateActionDisplays;
 	}
+	
+	
+	public List<ClearingMemberCorporateActionReportPerStockDisplay> generateClearingMemberCorporateActionReport(int cmid) {
+		this.setStockObligation();
+		this.setStockObligationPostCorporateAction();
+		
+		List<ClearingMemberCorporateActionReportPerStockDisplay> clearingMemberCorporateActionReportPerStockDisplays = new ArrayList<>();
+		
+		HashMap<Integer, Integer> inner = this.stockObligation.get(cmid);
+		HashMap<Integer, Double> innerPostCorporateAction = this.stockObligationPostCorporateAction.get(cmid);
+		
+		for(Integer stockid : inner.keySet()) {
+			ClearingMemberCorporateActionReportPerStockDisplay temp = new ClearingMemberCorporateActionReportPerStockDisplay();
+			temp.setClearingMemberID(cmid);
+			temp.setClearingMemberName(accessCMs.get(cmid).getClearingMemberName());
+			temp.setStockid(stockid);
+			temp.setStockName(accessStocks.get(stockid).getStockName());
+			
+			temp.setOpeningBalance(openingStockBalanceDAO.getOpeningStockBalance(cmid, stockid).getQuantity());
+			temp.setDailyObligation(this.stockObligation.get(cmid).get(stockid));
+			temp.setNetTotal(temp.getOpeningBalance() + temp.getDailyObligation());
+			temp.setCorporateAction((accessStocks.get(stockid).getCorporateActionFactor() - 1) * temp.getNetTotal());
+			temp.setClosingBalance(temp.getNetTotal()+temp.getCorporateAction());
+			
+			clearingMemberCorporateActionReportPerStockDisplays.add(temp);
+			
+			
+		}
+		
+		return clearingMemberCorporateActionReportPerStockDisplays;
+	}
 
 	public List<StockObligationDisplay> generateStockObligationReport() {
 		this.setStockObligation();
@@ -254,6 +286,29 @@ public class StockObligation {
 		}
 
 		return;
+	}
+	
+	public List<StockObligationDisplay> generateShortageReport(){
+		this.setShortage();
+
+		List<StockObligationDisplay> shortageDisplay = new ArrayList<>();
+
+		for (String cmName : this.stockShortageDisplay.keySet()) {
+
+			StockObligationDisplay temp = new StockObligationDisplay();
+			temp.setName(cmName);
+
+			temp.setApple(this.stockShortageDisplay.get(temp.getName()).get("Apple"));
+			temp.setGoogle(this.stockShortageDisplay.get(temp.getName()).get("Google"));
+			temp.setAmazon(this.stockShortageDisplay.get(temp.getName()).get("Amazon"));
+			temp.setNetflix(this.stockShortageDisplay.get(temp.getName()).get("Netfilx"));
+			temp.setFacebook(this.stockShortageDisplay.get(temp.getName()).get("Facebook"));
+
+			shortageDisplay.add(temp);
+
+		}
+
+		return shortageDisplay;
 	}
 	
 	public StockObligationDisplay generateClearingMemberStockObligationReport(int cmid) {

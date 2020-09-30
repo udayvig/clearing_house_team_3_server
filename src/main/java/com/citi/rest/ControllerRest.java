@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.bean.ClearingMember;
+import com.citi.displaybeans.ClearingMemberCorporateActionReportPerStockDisplay;
 import com.citi.displaybeans.CostSettlementDisplay;
 import com.citi.displaybeans.FundObligationDisplay;
 import com.citi.displaybeans.OpeningBalanceDisplay;
 import com.citi.displaybeans.StockObligationDisplay;
+import com.citi.displaybeans.TradeBookDisplay;
 import com.citi.displaybeans.TradeDisplay;
 import com.citi.service.ClearingHouseService;
 import com.citi.service.ClearingMemberService;
@@ -88,6 +90,12 @@ public class ControllerRest {
 		return stockObligation.generateStockObligationReport();
 	}
 	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/stock-shortage")
+	@ResponseBody
+	public List<StockObligationDisplay> stockShortage() {
+		return stockObligation.generateShortageReport();
+	}
+	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/fund-obligation")
 	@ResponseBody
 	public List<FundObligationDisplay> fundObligation() {
@@ -131,6 +139,12 @@ public class ControllerRest {
 		return clearingMemberService.getCmSellTradebook(id) ;
 	}
 	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-tradebook")
+	@ResponseBody
+	public List<TradeBookDisplay> cmTradebook(@RequestParam("cmid") int id) {
+		return clearingMemberService.getCmTradebook(id) ;
+	}
+	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-obligation")
 	@ResponseBody
 	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") int id) {
@@ -151,7 +165,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-corporate-action-report")
 	@ResponseBody
-	public String cmCorporateActionReport(@RequestParam("cmid") int id) {
-		return "CM with id = " + id + " 's post corporate action report: 625k USD, 70k USD, ....";
+	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("cmid") int id) {
+		return stockObligation.generateClearingMemberCorporateActionReport(id);
 	}
 }

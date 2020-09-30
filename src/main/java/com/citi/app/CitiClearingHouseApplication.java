@@ -26,7 +26,8 @@ public class CitiClearingHouseApplication {
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
-//		rdg.initialise();
+		rdg.initialise();
+		rdg.generateInterestRateForFunds();
 //		rdg.generateTrades(10);
 
 //		rdg.generateOpeningStockBalances();

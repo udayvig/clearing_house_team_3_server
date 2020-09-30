@@ -16,6 +16,7 @@ import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
 import com.citi.displaybeans.OpeningBalanceDisplay;
+import com.citi.displaybeans.TradeBookDisplay;
 import com.citi.displaybeans.TradeDisplay;
 
 @Service
@@ -107,6 +108,32 @@ public class ClearingMemberService {
 			tradeDisplay.setTradeValue(trade.getTradeValue());
 			
 			tradeBook.add(tradeDisplay);
+		}
+		
+		return tradeBook;
+	}
+	
+	public List<TradeBookDisplay> getCmTradebook(int id){
+		List<Trade> tradeList = tradeDAO.getTradesByClearingMemberID(id);
+		List<TradeBookDisplay> tradeBook = new ArrayList<>();
+		
+		for(Trade trade : tradeList) {
+			TradeBookDisplay tradeBookDisplay = new TradeBookDisplay();
+			tradeBookDisplay.setCmName(clearingMemberNames.get(id));
+			tradeBookDisplay.setPrice(trade.getPrice());
+			tradeBookDisplay.setQuantity(trade.getQuantity());
+			tradeBookDisplay.setTradeID(trade.getTradeID());
+			tradeBookDisplay.setStockName(stockNames.get(trade.getStockID()));
+			
+			if(trade.getBuyerClearingMemberID() == id) {
+				tradeBookDisplay.setOrderType("buy");
+			}else if(trade.getSellerClearingMemberID() == id) {
+				tradeBookDisplay.setOrderType("sell");
+			}else {
+				tradeBookDisplay.setOrderType("error");
+			}
+			
+			tradeBook.add(tradeBookDisplay);
 		}
 		
 		return tradeBook;
