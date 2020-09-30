@@ -16,6 +16,8 @@ public interface TradeDAO {
 	
 	List<Trade> getTradesBySellingClearingMemberID(int sellerClearingMemberID);
 	
+	List<Trade> getTradesByClearingMemberID(int clearingMemberID);
+	
 	List<Trade> getAllTrades();
 	
 	void deleteTrade(int tradeID);

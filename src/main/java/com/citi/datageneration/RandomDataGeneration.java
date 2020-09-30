@@ -45,9 +45,9 @@ public class RandomDataGeneration {
 	int minForQuantity = 10000;
 	int maxForQuantity = 100001;
 	
-	//Stock
-	int minForStockQuantity = 10000;
-	int maxForStockQuantity = 500001;
+	//Opening Stock Balances
+	int minForStockQuantity = -10000;
+	int maxForStockQuantity = 10001;
 	
 	//Corporate Actions
 	int maxForCorporateActions = 3;
@@ -101,7 +101,7 @@ public class RandomDataGeneration {
 	}
 	
 	private int generateOpeningStockBalance(){
-		return ThreadLocalRandom.current().nextInt(-10000, 10001);
+		return ThreadLocalRandom.current().nextInt(minForStockQuantity, maxForStockQuantity);
 	}
 	
 	public void generateOpeningFundBalances() {
@@ -153,6 +153,6 @@ public class RandomDataGeneration {
 		df.setRoundingMode(RoundingMode.DOWN);
 		double generatedFundsBorrowingRate = ThreadLocalRandom.current().nextDouble(1, 20);
 		double fundsBorrowingRate = new Double(df.format(generatedFundsBorrowingRate));
-		clearingHouse.setFundBorrowingRate(fundsBorrowingRate);
+		clearingHouse.setFundBorrowingRate(fundsBorrowingRate/100);
 	}
 }

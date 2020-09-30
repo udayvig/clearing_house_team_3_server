@@ -60,6 +60,13 @@ public class TradeDAOImpl implements TradeDAO {
 		//System.out.println("Trades: " + trades);
 		return trades;	
 	}
+	
+	@Override
+	public List<Trade> getTradesByClearingMemberID(int clearingMemberID){
+		String SQL = "select * from trade where buying_clearing_member = ? or selling_clearing_member = ?";
+		List<Trade> trades = jdbcTemplateObject.query(SQL, new Object[] {clearingMemberID, clearingMemberID}, new TradeMapper());
+		return trades;
+	}
 
 	@Override
 	public List<Trade> getAllTrades() {
