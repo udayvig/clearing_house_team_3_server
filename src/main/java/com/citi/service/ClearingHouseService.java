@@ -18,7 +18,6 @@ import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
 import com.citi.displaybeans.OpeningBalanceDisplay;
 import com.citi.displaybeans.TradeDisplay;
-import com.citi.servicebeans.StockObligation;
 
 @Service
 public class ClearingHouseService {

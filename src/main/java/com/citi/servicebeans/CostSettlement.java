@@ -34,6 +34,8 @@ public class CostSettlement {
 	
 	public CostSettlementDisplay generateCostSettlementReport(int clearingMemberID) {
 		//Set fund borrowing interest rate
+		this.stockObligation.setShortage();
+		this.fundObligation.setFundShortage();
 		this.fundBorrowingRate = clearingHouse.getFundBorrowingRate();
 		CostSettlementDisplay costSettlementDisplay = new CostSettlementDisplay();
 		ClearingMember clearingMember = clearingMemberDAOImpl.getClearingMember(clearingMemberID);
@@ -41,7 +43,7 @@ public class CostSettlement {
 		costSettlementDisplay.setDailyObligation(fundObligation.getFundObligation().get(clearingMemberID));
 		costSettlementDisplay.setCostOfFunds(fundObligation.getFundShortage().get(clearingMemberID) * fundBorrowingRate	* (double)(2d/365d));
 		double costOfSecurities = 0;
-		for(Map.Entry entry : stockObligation.getStockShortage().get(clearingMemberID).entrySet()) {
+		for(Map.Entry<Integer, Integer> entry : stockObligation.getStockShortage().get(clearingMemberID).entrySet()) {
 			double stockBorrowingRate = stockDAOImpl.getStock((Integer)entry.getKey()).getBorrowingRate();
 			costOfSecurities += stockBorrowingRate * (Integer)entry.getValue();
 		}

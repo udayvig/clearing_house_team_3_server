@@ -11,16 +11,5 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAutoConfiguration
 @EnableWebMvc
 public class ProjectConfig {
-//	@Bean
-//	public DataSource dataSource() {
-//		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//		// MySQL database we are using
-//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//		dataSource.setUrl("jdbc:mysql://db-clearing-and-settlement.ccijxu77k0xg.us-west-2.rds.amazonaws.com:3306/db_clearing_and_settlement");
-//		dataSource.setUsername("admin");
-//		dataSource.setPassword("admin123");
-//
-//		return dataSource;
-//	}
 
 }

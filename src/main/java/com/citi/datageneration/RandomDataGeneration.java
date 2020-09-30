@@ -51,6 +51,7 @@ public class RandomDataGeneration {
 	
 	//Corporate Actions
 	int maxForCorporateActions = 3;
+	int maxForCorporateActionFactor = 11;
 	
 	public void initialise() {
 		maxForStockIDs = stockDAO.getAllStocksList().size() + 1;
@@ -136,17 +137,33 @@ public class RandomDataGeneration {
 		return ThreadLocalRandom.current().nextDouble(1, 10);
 	}
 	
-	public void generateCorporateActions() {
+	public void generateCorporateActionFactors() {
 		int corporateAction = 0;
+		String corporateActionName = "";
+		double corporateActionFactor = 1.0;
 		
 		for(int i = 1; i < maxForStockIDs; i++) {
 			corporateAction = generateCorporateAction();
-			//stockDAO.updateStockCorporateAction(i, corporateAction);
+			corporateActionFactor = generateCorporateActionFactor();
+			
+			if(corporateAction == 1) {
+				corporateActionName = "bonus";
+			}else if(corporateAction == 2) {
+				corporateActionName = "stock split";
+			}else if(corporateAction == 0) {
+				corporateActionName = "NA";
+			}
+			
+			stockDAO.updateStockCorporateAction(i, corporateActionName, corporateActionFactor);
 		}
 	}
 	
 	private int generateCorporateAction() {
 		return randomGenerator.nextInt(maxForCorporateActions);
+	}
+	
+	private double generateCorporateActionFactor() {
+		return ThreadLocalRandom.current().nextDouble(1, 10);
 	}
 	
 	public void generateInterestRateForFunds() {

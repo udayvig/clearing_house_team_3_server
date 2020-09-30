@@ -12,4 +12,6 @@ public interface ClearingMemberDAO {
 	public void updateClearingMemberFundBalance(int clearingMemberID, double clearingMemberOpeningFundBalance);
 	public void deleteClearingMember(int clearingMemberID);
 	public List<ClearingMember> getAllClearingMembers();
+	public void updateSessionToken(int cmID, String token);
+	public ClearingMember getClearingMemberFromToken(String sessionToken);
 }
