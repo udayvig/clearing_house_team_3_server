@@ -15,8 +15,13 @@ public class AuthenticationDAO {
 	public int getCMID(String username) {
 		// TODO Auto-generated method stub
 		String SQL = "select * from authentication where username = ?";
-		Authentication authObject = jdbcTemplateObject.queryForObject(SQL, new Object[] {username}, new AuthenticationMapper());
-		return authObject.getClearingMemberID();
+		try {
+			Authentication authObject = jdbcTemplateObject.queryForObject(SQL, new Object[] {username}, new AuthenticationMapper());
+			return authObject.getClearingMemberID();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 
 	public String getCredentials(String username) {

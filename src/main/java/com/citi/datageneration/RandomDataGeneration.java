@@ -58,16 +58,6 @@ public class RandomDataGeneration {
 		maxForClearingMemberIDs = clearingMemberDAO.getAllClearingMembers().size() + 1;
 	}
 	
-	public List<Trade> generateTradeList(int numberOfTrades){
-		List<Trade> trades = new ArrayList<>();
-		for(int i = 0; i < numberOfTrades; i++) {
-			Trade trade = generateTradeForTradeList();
-			trades.add(trade);
-		}
-		
-		return trades;
-	}
-	
 	public List<Trade> generateTrades(int numberOfTrades){
 		List<Trade> trades = new ArrayList<>();
 		for(int i = 0; i < numberOfTrades; i++) {
@@ -97,28 +87,6 @@ public class RandomDataGeneration {
 		trade.setPrice(price);
 		
 		tradeDAO.addTrade(buyerClearingMemberID, sellerClearingMemberID, price, quantity, stockID);
-		return trade;
-	}
-	
-	private Trade generateTradeForTradeList(){
-		df.setRoundingMode(RoundingMode.DOWN);
-		Trade trade = new Trade();
-		
-		int stockID = minForIDs + randomGenerator.nextInt(maxForStockIDs - minForIDs);
-		int buyerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
-		int sellerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
-		int quantity = minForQuantity + randomGenerator.nextInt(maxForQuantity - minForQuantity);
-		double generatedPrice = ThreadLocalRandom.current().nextDouble(0, 1000);
-		
-		double price = new Double(df.format(generatedPrice));
-		
-		trade.setBuyerClearingMemberID(buyerClearingMemberID);
-		trade.setSellerClearingMemberID(sellerClearingMemberID);
-		trade.setStockID(stockID);
-		trade.setQuantity(quantity);
-		trade.setPrice(price);
-		
-		//tradeDAO.addTrade(buyerClearingMemberID, sellerClearingMemberID, price, quantity, stockID);
 		return trade;
 	}
 	
