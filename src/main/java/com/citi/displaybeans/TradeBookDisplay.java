@@ -7,7 +7,16 @@ public class TradeBookDisplay {
 	private String stockName;
 	private int quantity;
 	private double price;
+	private double tradeValue;
 	
+	public double getTradeValue() {
+		return tradeValue;
+	}
+
+	public void setTradeValue(double tradeValue) {
+		this.tradeValue = tradeValue;
+	}
+
 	public int getTradeID() {
 		return tradeID;
 	}

@@ -17,6 +17,7 @@ import com.citi.dao.OpeningStockBalanceDAO;
 import com.citi.dao.StockDAO;
 import com.citi.dao.TradeDAO;
 import com.citi.displaybeans.OpeningBalanceDisplay;
+import com.citi.displaybeans.StockBorrowingRateDisplay;
 import com.citi.displaybeans.TradeDisplay;
 
 @Service
@@ -138,19 +139,31 @@ public class ClearingHouseService {
 		return openingBalanceDisplayList;
 	}
 	
-	public HashMap<String, Double> getStockBorrowingRate(){
-		HashMap<String, Double> map = new HashMap<>();
+	public List<StockBorrowingRateDisplay> getStockBorrowingRate(){
+//		HashMap<String, Double> map = new HashMap<>();
+//		
+//		for(Stock stock : stocks) {
+//			map.put(stock.getStockName(), stock.getBorrowingRate());
+//		}
+//		
+//		return map;
+		
+		List<StockBorrowingRateDisplay> list = new ArrayList<>();
 		
 		for(Stock stock : stocks) {
-			map.put(stock.getStockName(), stock.getBorrowingRate());
+			StockBorrowingRateDisplay stockBorrowingRateDisplay = new StockBorrowingRateDisplay();
+			stockBorrowingRateDisplay.setBorrowingcost(stock.getBorrowingRate());
+			stockBorrowingRateDisplay.setStock(stock.getStockName());
+			
+			list.add(stockBorrowingRateDisplay);
 		}
 		
-		return map;
+		return list;
 	}
 	
 	public HashMap<String, Double> getFundInterestRate(){
 		HashMap<String, Double> map = new HashMap<>();
-		map.put("Interest Rate", clearingHouse.getFundBorrowingRate());
+		map.put("interest_rate", clearingHouse.getFundBorrowingRate());
 		
 		return map;
 	}
