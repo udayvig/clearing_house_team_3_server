@@ -1,8 +1,11 @@
 package com.citi.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +24,37 @@ public class TradeDAOImpl implements TradeDAO {
 		String SQL = "insert into trade (buying_clearing_member, selling_clearing_member, stock_id, quantity, price) "
 				+ "values (?, ?, ?, ?, ?)";
 
+		long ct = System.currentTimeMillis();
 		jdbcTemplateObject.update(SQL, buyerClearingMemberID, sellerClearingMemberID, stockID, quantity, price);
+		System.out.println();
+		System.out.println("Added Trade in " + (System.currentTimeMillis() - ct) + "ms.");
+	}
+	
+	@Override
+	public void addTradeList(List<Trade> tradeList) {
+		String SQL = "insert into trade (buying_clearing_member, selling_clearing_member, stock_id, quantity, price) "
+				+ "values (?, ?, ?, ?, ?)";
+
+		long ct = System.currentTimeMillis();
+		jdbcTemplateObject.batchUpdate(SQL, new BatchPreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				// TODO Auto-generated method stub
+				Trade trade = tradeList.get(i);
+				ps.setInt(1, trade.getBuyerClearingMemberID());
+				ps.setInt(2, trade.getSellerClearingMemberID());
+				ps.setInt(3, trade.getStockID());
+				ps.setInt(4, trade.getQuantity());
+				ps.setDouble(5, trade.getPrice());
+			}
+			
+			@Override
+			public int getBatchSize() {
+				// TODO Auto-generated method stub
+				return tradeList.size();
+			}
+		});
 	}
 
 	@Override

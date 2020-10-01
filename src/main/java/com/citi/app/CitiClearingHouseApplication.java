@@ -26,12 +26,14 @@ public class CitiClearingHouseApplication {
 		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 		rdg.initialise();
-		rdg.generateInterestRateForFunds();
-//		rdg.generateTrades(10);
+		//rdg.generateInterestRateForFunds();
+		rdg.generateTrades(10);
+		
+		rdg.generateTradeList(10);
 
 //		rdg.generateOpeningStockBalances();
 //		StockObligation stockObligation = context.getBean(StockObligation.class);
-		FundObligation fundObligation = context.getBean(FundObligation.class);
+//		FundObligation fundObligation = context.getBean(FundObligation.class);
 //		
 //		stockObligation.initialise();
 //		fundObligation.initFundObligation();
@@ -42,23 +44,23 @@ public class CitiClearingHouseApplication {
 //		System.out.println(stockObligation.getStockObligationDisplay());
 //		System.out.println(fundObligation.getFundObligationDisplay());
 
-		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
-		cls.initialise();
+//		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
+//		cls.initialise();
+//
+//		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
+//		cms.initialise();
 
-		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
-		cms.initialise();
-
-		fundObligation.initFundObligation();
-		fundObligation.setFundObligationDisplayList();
+//		fundObligation.initFundObligation();
+//		fundObligation.setFundObligationDisplayList();
 //
-		fundObligation.initFundShortage();
-		fundObligation.setFundShortageDisplayList();
+//		fundObligation.initFundShortage();
+//		fundObligation.setFundShortageDisplayList();
 //
-		StockObligation stockObligation = context.getBean(StockObligation.class);
+//		StockObligation stockObligation = context.getBean(StockObligation.class);
 //
-		stockObligation.initialise();
-		stockObligation.generateStockObligationReport();
-		stockObligation.setShortage();
+//		stockObligation.initialise();
+//		stockObligation.generateStockObligationReport();
+//		stockObligation.setShortage();
 //
 //		System.out.println(stockObligation.getStockShortage());
 //

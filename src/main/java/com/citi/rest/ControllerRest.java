@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.bean.ClearingMember;
 import com.citi.dao.ClearingMemberDAO;
+import com.citi.dao.TradeDAO;
 import com.citi.displaybeans.ClearingMemberCorporateActionReportPerStockDisplay;
 import com.citi.displaybeans.CostSettlementDisplay;
 import com.citi.displaybeans.FundObligationDisplay;
@@ -51,6 +52,9 @@ public class ControllerRest {
 	
 	@Autowired
 	private ClearingMemberDAO clearingMemberDAO;
+	
+	@Autowired
+	private TradeDAO tradeDAO;
 	
 	@RequestMapping("*")
 	@ResponseBody
@@ -111,6 +115,13 @@ public class ControllerRest {
 	@ResponseBody
 	public List<StockObligationDisplay> postCorporateActionStockObligation() {
 		return stockObligation.generateStockObligationReportPostCorporateAction();
+	}
+	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.POST, value = "/add-trade")
+	@ResponseBody
+	public void addTrade(@RequestParam("bcm_id") int buyerClearingMemberID, @RequestParam("scm_id") int sellerClearingMemberID,
+			@RequestParam("price") double price, @RequestParam("qty") int quantity, @RequestParam("stock_id") int stockID) {
+		tradeDAO.addTrade(buyerClearingMemberID, sellerClearingMemberID, price, quantity, stockID);
 	}
 	
 //	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
