@@ -1,5 +1,6 @@
 package com.citi.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import com.citi.displaybeans.ClearingMemberCorporateActionReportPerStockDisplay;
 import com.citi.displaybeans.CostSettlementDisplay;
 import com.citi.displaybeans.FundObligationDisplay;
 import com.citi.displaybeans.OpeningBalanceDisplay;
+import com.citi.displaybeans.StockBorrowingRateDisplay;
 import com.citi.displaybeans.StockObligationDisplay;
 import com.citi.displaybeans.TradeBookDisplay;
 import com.citi.displaybeans.TradeDisplay;
@@ -192,25 +194,30 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/trade-volume")
 	@ResponseBody
-	public HashMap<String, Integer> tradeVolume(@RequestParam String token) {
+	public List<HashMap<String, Integer>> tradeVolume(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
-		return clearingHouseService.getTradeVolume();
+		
+		List<HashMap<String, Integer>> list = new ArrayList<>();
+		list.add(clearingHouseService.getTradeVolume());
+		return list;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/interest-rate")
 	@ResponseBody
-	public HashMap<String, Double> interestRate(@RequestParam String token) {
+	public List<HashMap<String, Double>> interestRate(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
-		return clearingHouseService.getFundInterestRate();
+		List<HashMap<String, Double>> list = new ArrayList<>();
+		list.add(clearingHouseService.getFundInterestRate());
+		return list;
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/opening-balance")
 	@ResponseBody
-	public List<OpeningBalanceDisplay> openingBalance(@RequestParam String token) {
+	public List<OpeningBalanceDisplay> openingBalance(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -219,7 +226,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/stock-borrowing-rate")
 	@ResponseBody
-	public HashMap<String, Double> stockBorrowingRate(@RequestParam String token) {
+	public List<StockBorrowingRateDisplay> stockBorrowingRate(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -228,7 +235,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/tradebook")
 	@ResponseBody
-	public List<TradeDisplay> tradebook(@RequestParam String token) {
+	public List<TradeDisplay> tradebook(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -237,7 +244,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/stock-obligation")
 	@ResponseBody
-	public List<StockObligationDisplay> stockObligation(@RequestParam String token) {
+	public List<StockObligationDisplay> stockObligation(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -246,7 +253,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/stock-shortage")
 	@ResponseBody
-	public List<StockObligationDisplay> stockShortage(@RequestParam String token) {
+	public List<StockObligationDisplay> stockShortage(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -255,7 +262,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/fund-obligation")
 	@ResponseBody
-	public List<FundObligationDisplay> fundObligation(@RequestParam String token) {
+	public List<FundObligationDisplay> fundObligation(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -265,7 +272,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/post-corporate-action-stock-obligation")
 	@ResponseBody
-	public List<StockObligationDisplay> postCorporateActionStockObligation(@RequestParam String token) {
+	public List<StockObligationDisplay> postCorporateActionStockObligation(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -275,7 +282,8 @@ public class ControllerRest {
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.POST, value = "/add-trade")
 	@ResponseBody
 	public void addTrade(@RequestParam("bcm_id") int buyerClearingMemberID, @RequestParam("scm_id") int sellerClearingMemberID,
-			@RequestParam("price") double price, @RequestParam("qty") int quantity, @RequestParam("stock_id") int stockID, @RequestParam String token) {
+			@RequestParam("price") double price, @RequestParam("qty") int quantity, @RequestParam("stock_id") int stockID, 
+			@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -284,7 +292,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/get-cm-id")
 	@ResponseBody
-	public List<ClearingMember> getCMID(@RequestParam String token) {
+	public List<ClearingMember> getCMID(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -293,7 +301,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/get-stock-id")
 	@ResponseBody
-	public List<Stock> getStockID(@RequestParam String token) {
+	public List<Stock> getStockID(@RequestParam("token") String token) {
 		if(clearingHouseDAO.getCHIDFromToken(token) == -1) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
@@ -306,29 +314,33 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-fund-balance")
 	@ResponseBody
-	public ClearingMember cmOpeningFundBalance(@RequestParam("cmid") String token) {
+	public List<ClearingMember> cmOpeningFundBalance(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
 		}else {
-			return clearingMemberService.getOpeningFundBalance(id);
+			List<ClearingMember> list = new ArrayList<>();
+			list.add(clearingMemberService.getOpeningFundBalance(id));
+			return list;
 		}
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-stock-balance")
 	@ResponseBody
-	public OpeningBalanceDisplay cmOpeningStockBalance(@RequestParam("cmid") String token) {
+	public List<OpeningBalanceDisplay> cmOpeningStockBalance(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
 		}else {
-			return clearingMemberService.getOpeningStockBalance(id);
+			List<OpeningBalanceDisplay> list = new ArrayList<>();
+			list.add(clearingMemberService.getOpeningStockBalance(id));
+			return list;
 		}
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-buy-tradebook")
 	@ResponseBody
-	public List<TradeDisplay> cmBuyTradebook(@RequestParam("cmid") String token) {
+	public List<TradeDisplay> cmBuyTradebook(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
@@ -339,7 +351,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-sell-tradebook")
 	@ResponseBody
-	public List<TradeDisplay> cmSellTradebook(@RequestParam("cmid") String token) {
+	public List<TradeDisplay> cmSellTradebook(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
@@ -350,7 +362,7 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-tradebook")
 	@ResponseBody
-	public List<TradeBookDisplay> cmTradebook(@RequestParam("cmid") String token) {
+	public List<TradeBookDisplay> cmTradebook(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
@@ -361,40 +373,48 @@ public class ControllerRest {
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-obligation")
 	@ResponseBody
-	public StockObligationDisplay cmStockObligation(@RequestParam("cmid") String token) {
+	public List<StockObligationDisplay> cmStockObligation(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
 		}else {
-			return stockObligation.generateClearingMemberStockObligationReport(id);
+			List<StockObligationDisplay> list = new ArrayList<>();
+			list.add(stockObligation.generateClearingMemberStockObligationReport(id));
+			return list;
 		}
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-fund-obligation")
 	@ResponseBody
-	public double cmFundObligation(@RequestParam("cmid") String token) {
+	public List<HashMap<String, Double>> cmFundObligation(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
+		HashMap<String, Double> map = new HashMap<>();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
 		}else {
-			return fundObligation.getClearingMemberFundObligation(id);
+			map.put("fund", fundObligation.getClearingMemberFundObligation(id));
+			List<HashMap<String, Double>> list = new ArrayList<>();
+			list.add(map);
+			return list;
 		}
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-cost-of-settlement")
 	@ResponseBody
-	public CostSettlementDisplay cmCostOfSettlement(@RequestParam("cmid") String token) {
+	public List<CostSettlementDisplay> cmCostOfSettlement(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
 		}else {
-			return costSettlement.generateCostSettlementReport(id);
+			List<CostSettlementDisplay> list = new ArrayList<>();
+			list.add(costSettlement.generateCostSettlementReport(id));
+			return list;
 		}
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-corporate-action-report")
 	@ResponseBody
-	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("cmid") String token) {
+	public List<ClearingMemberCorporateActionReportPerStockDisplay> cmCorporateActionReport(@RequestParam("token") String token) {
 		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
 		if(id == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");

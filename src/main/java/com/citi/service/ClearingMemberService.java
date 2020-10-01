@@ -121,6 +121,7 @@ public class ClearingMemberService {
 			tradeBookDisplay.setQuantity(trade.getQuantity());
 			tradeBookDisplay.setTradeID(trade.getTradeID());
 			tradeBookDisplay.setStockName(stockNames.get(trade.getStockID()));
+			tradeBookDisplay.setTradeValue(trade.getTradeValue());
 			
 			if(trade.getBuyerClearingMemberID() == id) {
 				tradeBookDisplay.setOrderType("buy");

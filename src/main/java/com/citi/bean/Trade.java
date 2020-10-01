@@ -1,5 +1,8 @@
 package com.citi.bean;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 /**
  * A class which represents a single trade (transaction).
  */
@@ -61,6 +64,10 @@ public class Trade {
 	}
 	
 	public double getTradeValue() {
-		return (double)(this.quantity * this.price); 
+		DecimalFormat df = new DecimalFormat("#.##");
+		df.setRoundingMode(RoundingMode.DOWN);
+		double tv = (double)(this.quantity * this.price);
+		double tradeValue = new Double(df.format(tv));
+		return tradeValue;
 	}
 }
