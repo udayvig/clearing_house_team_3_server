@@ -16,6 +16,12 @@ public class ClearingHouseDAO {
 	
 	public int getCHIDFromToken(String token) {
 		String SQL = "select clearing_house_id from clearing_house where session_token = ?";
-		return jdbcTemplateObject.queryForObject(SQL, Integer.class, new Object[] {token});
+		try {
+			int id = jdbcTemplateObject.queryForObject(SQL, Integer.class, new Object[] {token});
+			return id;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }

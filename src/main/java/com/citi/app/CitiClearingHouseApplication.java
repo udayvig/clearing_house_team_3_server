@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.citi.config.ProjectConfig;
+import com.citi.dao.TradeDAO;
+import com.citi.dao.TradeDAOImpl;
 import com.citi.datageneration.RandomDataGeneration;
 import com.citi.service.ClearingHouseService;
 import com.citi.service.ClearingMemberService;
@@ -27,10 +29,11 @@ public class CitiClearingHouseApplication {
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 		rdg.initialise();
 		//rdg.generateInterestRateForFunds();
-		rdg.generateTrades(10);
+//		rdg.generateTrades(10);
 		
-		rdg.generateTradeList(10);
+//		rdg.generateTradeList(10);
 
+//		tradeDAO.addTradeList(rdg.generateTradeList(10));
 //		rdg.generateOpeningStockBalances();
 //		StockObligation stockObligation = context.getBean(StockObligation.class);
 //		FundObligation fundObligation = context.getBean(FundObligation.class);
@@ -44,11 +47,11 @@ public class CitiClearingHouseApplication {
 //		System.out.println(stockObligation.getStockObligationDisplay());
 //		System.out.println(fundObligation.getFundObligationDisplay());
 
-//		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
-//		cls.initialise();
+		ClearingHouseService cls = context.getBean(ClearingHouseService.class);
+		cls.initialise();
 //
-//		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
-//		cms.initialise();
+		ClearingMemberService cms = context.getBean(ClearingMemberService.class);
+		cms.initialise();
 
 //		fundObligation.initFundObligation();
 //		fundObligation.setFundObligationDisplayList();
