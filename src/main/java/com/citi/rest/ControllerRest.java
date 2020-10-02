@@ -288,6 +288,7 @@ public class ControllerRest {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized. ");
 		}
 		tradeDAO.addTrade(buyerClearingMemberID, sellerClearingMemberID, price, quantity, stockID);
+		clearingHouseService.initialise();
 	}
 	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/get-cm-id")

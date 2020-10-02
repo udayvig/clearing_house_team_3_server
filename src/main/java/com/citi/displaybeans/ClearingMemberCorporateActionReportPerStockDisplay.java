@@ -11,10 +11,16 @@ public class ClearingMemberCorporateActionReportPerStockDisplay {
 	private int openingBalance;
 	private int dailyObligation;
 	private int netTotal;
+/**/	private String corporateActionName;
 	private double corporateAction;
 	private double closingBalance;
 	
-	
+/**/	public String getCorporateActionName() {
+		return corporateActionName;
+	}
+	public void setCorporateActionName(String corporateActionName) {
+		this.corporateActionName = corporateActionName;
+	}/**/
 	public int getClearingMemberID() {
 		return clearingMemberID;
 	}

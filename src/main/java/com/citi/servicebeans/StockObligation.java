@@ -156,9 +156,14 @@ public class StockObligation {
 			HashMap<String, Double> mapDisplay = new HashMap<>();
 			
 			for(Integer stockID : this.stockObligation.get(cmID).keySet()) {
-				map.put(stockID, this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
-				mapDisplay.put(accessStocks.get(stockID).getStockName(), 
-						this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
+				/**/if(this.stockObligation.get(cmID).get(stockID) > 0) {
+					map.put(stockID, this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
+					mapDisplay.put(accessStocks.get(stockID).getStockName(), 
+							this.stockObligation.get(cmID).get(stockID) * accessStocks.get(stockID).getCorporateActionFactor());
+				}else{
+					map.put(stockID, (double)(this.stockObligation.get(cmID).get(stockID)));
+					mapDisplay.put(accessStocks.get(stockID).getStockName(), (double)(this.stockObligation.get(cmID).get(stockID)));
+				}/**/
 			}
 			
 			this.stockObligationPostCorporateAction.put(cmID, map);
@@ -203,11 +208,16 @@ public class StockObligation {
 			temp.setClearingMemberName(accessCMs.get(cmid).getClearingMemberName());
 			temp.setStockid(stockid);
 			temp.setStockName(accessStocks.get(stockid).getStockName());
+			/**/temp.setCorporateActionName(accessStocks.get(stockid).getCorporateAction());
 			
 			temp.setOpeningBalance(accessQty.get(new Pair(cmid, stockid)));
 			temp.setDailyObligation(this.stockObligation.get(cmid).get(stockid));
 			temp.setNetTotal(temp.getOpeningBalance() + temp.getDailyObligation());
-			temp.setCorporateAction((accessStocks.get(stockid).getCorporateActionFactor() - 1) * temp.getNetTotal());
+			/**/if(temp.getNetTotal() > 0) {
+				temp.setCorporateAction((accessStocks.get(stockid).getCorporateActionFactor() - 1) * temp.getNetTotal());
+			}else {
+				temp.setCorporateAction(0);
+			}/**/
 			temp.setClosingBalance(temp.getNetTotal()+temp.getCorporateAction());
 			
 			clearingMemberCorporateActionReportPerStockDisplays.add(temp);
