@@ -46,12 +46,12 @@ public class RandomDataGeneration {
 	int maxForQuantity = 100001;
 	
 	//Opening Stock Balances
-	int minForStockQuantity = -10000;
+	int minForStockQuantity = 0;
 	int maxForStockQuantity = 10001;
 	
 	//Corporate Actions
 	int maxForCorporateActions = 3;
-	int maxForCorporateActionFactor = 11;
+	int maxForCorporateActionFactor = 10;
 	
 	public void initialise() {
 		maxForStockIDs = stockDAO.getAllStocksList().size() + 1;
@@ -76,7 +76,27 @@ public class RandomDataGeneration {
 		int buyerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
 		int sellerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
 		int quantity = minForQuantity + randomGenerator.nextInt(maxForQuantity - minForQuantity);
-		double generatedPrice = ThreadLocalRandom.current().nextDouble(0, 1000);
+		
+		double generatedPrice = 0.0;
+		switch(stockID) {
+		case 1:
+			generatedPrice = ThreadLocalRandom.current().nextDouble(105, 129);
+			break;
+		case 2:
+			generatedPrice = ThreadLocalRandom.current().nextDouble(239, 294);
+			break;
+		case 3:
+			generatedPrice = ThreadLocalRandom.current().nextDouble(474, 581);
+			break;
+		case 4:
+			generatedPrice = ThreadLocalRandom.current().nextDouble(2899, 3544);
+			break;
+		case 5:
+			generatedPrice = ThreadLocalRandom.current().nextDouble(1339, 1637);
+			break;
+		}
+		
+		
 		
 		double price = new Double(df.format(generatedPrice));
 		
@@ -144,12 +164,14 @@ public class RandomDataGeneration {
 		
 		for(int i = 1; i < maxForStockIDs; i++) {
 			corporateAction = generateCorporateAction();
-			corporateActionFactor = generateCorporateActionFactor();
+			corporateActionFactor = 1.0;
 			
 			if(corporateAction == 1) {
 				corporateActionName = "bonus";
+				generateCorporateActionFactor();
 			}else if(corporateAction == 2) {
 				corporateActionName = "stock split";
+				generateCorporateActionFactor();
 			}else if(corporateAction == 0) {
 				corporateActionName = "NA";
 			}
@@ -163,7 +185,7 @@ public class RandomDataGeneration {
 	}
 	
 	private double generateCorporateActionFactor() {
-		return ThreadLocalRandom.current().nextDouble(1, 10);
+		return ThreadLocalRandom.current().nextDouble(1, maxForCorporateActionFactor);
 	}
 	
 	public void generateInterestRateForFunds() {

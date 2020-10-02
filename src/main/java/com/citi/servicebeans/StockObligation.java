@@ -204,7 +204,7 @@ public class StockObligation {
 			temp.setStockid(stockid);
 			temp.setStockName(accessStocks.get(stockid).getStockName());
 			
-			temp.setOpeningBalance(openingStockBalanceDAO.getOpeningStockBalance(cmid, stockid).getQuantity());
+			temp.setOpeningBalance(accessQty.get(new Pair(cmid, stockid)));
 			temp.setDailyObligation(this.stockObligation.get(cmid).get(stockid));
 			temp.setNetTotal(temp.getOpeningBalance() + temp.getDailyObligation());
 			temp.setCorporateAction((accessStocks.get(stockid).getCorporateActionFactor() - 1) * temp.getNetTotal());
