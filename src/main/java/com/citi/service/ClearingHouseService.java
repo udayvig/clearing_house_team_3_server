@@ -61,6 +61,7 @@ public class ClearingHouseService {
 	}
 	
 	public List<TradeDisplay> getTradeBook(){
+		//initialise();
 		List<TradeDisplay> tradeBook = new ArrayList<>();
 		
 		for(Trade trade : tradeList) {

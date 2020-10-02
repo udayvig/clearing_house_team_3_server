@@ -31,18 +31,19 @@ public class CitiClearingHouseApplication {
 		rdg.generateInterestRateForFunds();
 		//rdg.generateTrades(10);
 		rdg.generateStockBorrowingRates();
+		rdg.generateOpeningStockBalances();
 		
 //		rdg.generateTradeList(10);
 
 //		tradeDAO.addTradeList(rdg.generateTradeList(10));
 //		rdg.generateOpeningStockBalances();
-//		StockObligation stockObligation = context.getBean(StockObligation.class);
+		StockObligation stockObligation = context.getBean(StockObligation.class);
 //		FundObligation fundObligation = context.getBean(FundObligation.class);
 //		
-//		stockObligation.initialise();
+		stockObligation.initialise();
 //		fundObligation.initFundObligation();
 //		
-//		stockObligation.setStockObligation();
+		stockObligation.setStockObligation();
 //		fundObligation.setFundObligationDisplay();
 //		
 //		System.out.println(stockObligation.getStockObligationDisplay());

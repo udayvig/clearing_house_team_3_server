@@ -58,7 +58,8 @@ public class AuthenticationService {
 			return map;
 		}
 		
-		map.replace("token", "invalid_credentials");
+		map.put("token", "invalid_credentials");
+		map.put("type", "invalid_credentials");
 		return map;
 	}
 	
