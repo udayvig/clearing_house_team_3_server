@@ -1,6 +1,7 @@
 package com.citi.service;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,21 @@ public class AuthenticationService {
 		HashMap<String, String> map = new HashMap<>();
 		if(password.equals(pass)) {
 			int cmid = authenticationDAO.getCMID(username);
-			String sessionToken = new java.rmi.server.UID().toString().substring(0, 20).trim().replaceAll(":", "_");
+			//String sessionToken = new java.rmi.server.UID().toString().substring(0, 20).trim().replaceAll(":", "_");
+			
+			int leftLimit = 48;
+		    int rightLimit = 122;
+		    int targetStringLength = 20;
+		    Random random = new Random();
+		 
+		    String generatedString = random.ints(leftLimit, rightLimit + 1)
+		      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+		      .limit(targetStringLength)
+		      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+		      .toString();
+		 
+		    String sessionToken = generatedString;
+		    
 			if(cmid == 0) {
 				clearingHouseDAO.updateCHSessionToken(0, sessionToken);
 			}else {
