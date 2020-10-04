@@ -183,7 +183,7 @@ public class RandomDataGeneration {
 	}
 	
 	private double generateOpeningFundBalance(int clearingMemberID) {
-		return ThreadLocalRandom.current().nextDouble(-10000000, 10000000);
+		return ThreadLocalRandom.current().nextDouble(0, 10000000);
 	}
 	
 	public void generateStockBorrowingRates() {
@@ -213,10 +213,10 @@ public class RandomDataGeneration {
 			
 			if(corporateAction == 1) {
 				corporateActionName = "bonus";
-				generateCorporateActionFactor();
+				corporateActionFactor = generateCorporateActionFactor();
 			}else if(corporateAction == 2) {
 				corporateActionName = "stock split";
-				generateCorporateActionFactor();
+				corporateActionFactor = generateCorporateActionFactor();
 			}else if(corporateAction == 0) {
 				corporateActionName = "NA";
 			}
@@ -230,13 +230,13 @@ public class RandomDataGeneration {
 	}
 	
 	private double generateCorporateActionFactor() {
-		return ThreadLocalRandom.current().nextDouble(1, maxForCorporateActionFactor);
+		return ThreadLocalRandom.current().nextInt(1, maxForCorporateActionFactor);
 	}
 	
 	public void generateInterestRateForFunds() {
 		df.setRoundingMode(RoundingMode.DOWN);
 		double generatedFundsBorrowingRate = ThreadLocalRandom.current().nextDouble(1, 20);
 		double fundsBorrowingRate = new Double(df.format(generatedFundsBorrowingRate));
-		clearingHouse.setFundBorrowingRate(fundsBorrowingRate/100);
+		clearingHouse.setFundBorrowingRate(fundsBorrowingRate / 100);
 	}
 }

@@ -35,7 +35,7 @@ public class CostSettlementDisplay {
 		return total;
 	}
 	public void setTotal() {
-		this.total = this.dailyObligation - this.costOfFunds - this.costOfSecurities;
+		this.total = this.openingBalance + this.dailyObligation - this.costOfFunds - this.costOfSecurities;
 	}
 	@Override
 	public String toString() {
