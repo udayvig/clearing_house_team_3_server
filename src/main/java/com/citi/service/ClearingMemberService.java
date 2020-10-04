@@ -173,5 +173,59 @@ public class ClearingMemberService {
 		return openingStockDisplay;
 	}
 	
+	public List<HashMap<String, Integer>> getTradeVolume(int id) {
+		List<HashMap<String, Integer>> list = new ArrayList<>();
+		HashMap<String, Integer> map = new HashMap<>();
+		
+		List<Trade> trades = tradeDAO.getTradesByClearingMemberID(id);
+		int tradeVolume = 0;
+		
+		for(Trade trade : trades) {
+			tradeVolume += trade.getQuantity();
+		}
+		
+		map.put("trade_volume", tradeVolume);
+		list.add(map);
+		
+		return list;
+	}
 	
+	public List<OpeningBalanceDisplay> getCMOpeningBalance(int id){
+		HashMap<String, HashMap<String, Double>> openingBalances = new HashMap<>();
+		ClearingMember cm = clearingMemberDAO.getClearingMember(id);
+		
+		HashMap<String, Double> map = new HashMap<>();
+		String clearingMemberName = cm.getClearingMemberName();
+			
+		map.put("Funds", cm.getClearingMemberOpeningFundBalance());
+			
+		List<OpeningStockBalance> balanceList = openingStockBalanceDAO
+					.getOpeningStockBalanceByClearingMemberID(cm.getClearingMemberID());
+		
+		for(OpeningStockBalance balance : balanceList) {
+			String stockName = stockNames.get(balance.getStockID());
+			map.put(stockName, (double)(balance.getQuantity()));
+		}
+			
+		openingBalances.put(clearingMemberName, map);
+		
+		System.out.println(openingBalances);
+		
+		List<OpeningBalanceDisplay> openingBalanceDisplayList = new ArrayList<>();
+		for(String cmName : openingBalances.keySet()) {
+			OpeningBalanceDisplay openingBalanceDisplay = new OpeningBalanceDisplay();
+			openingBalanceDisplay.setClearingMemberName(cmName);
+			
+			openingBalanceDisplay.setAmazon(openingBalances.get(cmName).get("Amazon"));
+			openingBalanceDisplay.setApple(openingBalances.get(cmName).get("Apple"));
+			openingBalanceDisplay.setGoogle(openingBalances.get(cmName).get("Google"));
+			openingBalanceDisplay.setNetflix(openingBalances.get(cmName).get("Netfilx"));
+			openingBalanceDisplay.setFacebook(openingBalances.get(cmName).get("Facebook"));
+			openingBalanceDisplay.setCash(openingBalances.get(cmName).get("Funds"));
+			
+			openingBalanceDisplayList.add(openingBalanceDisplay);
+		}
+		
+		return openingBalanceDisplayList;
+	}
 }

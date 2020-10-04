@@ -326,6 +326,48 @@ public class ControllerRest {
 		}
 	}
 	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-balance")
+	@ResponseBody
+	public List<OpeningBalanceDisplay> cmOpeningBalance(@RequestParam("token") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
+		if(id == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
+		}else {
+			return clearingMemberService.getCMOpeningBalance(id);
+		}
+	}
+	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-trade-volume")
+	@ResponseBody
+	public List<HashMap<String, Integer>> cmTradeVolume(@RequestParam("token") String token) {
+		int id = clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID();
+		if(id == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
+		}else {
+			return clearingMemberService.getTradeVolume(id);
+		}
+	}
+	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-interest-rate")
+	@ResponseBody
+	public List<HashMap<String, Double>> cmInterestRate(@RequestParam("token") String token) {
+		if(clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID() == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
+		}
+		List<HashMap<String, Double>> list = new ArrayList<>();
+		list.add(clearingHouseService.getFundInterestRate());
+		return list;
+	}
+	
+	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-stock-borrowing-rate")
+	@ResponseBody
+	public List<StockBorrowingRateDisplay> cmStockBorrowingRate(@RequestParam("token") String token) {
+		if(clearingMemberDAO.getClearingMemberFromToken(token).getClearingMemberID() == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found. ");
+		}
+		return clearingHouseService.getStockBorrowingRate();
+	}
+	
 	@RequestMapping(produces = MediaType.APPLICATION_JSON, method = RequestMethod.GET, value = "/cm-opening-stock-balance")
 	@ResponseBody
 	public List<OpeningBalanceDisplay> cmOpeningStockBalance(@RequestParam("token") String token) {

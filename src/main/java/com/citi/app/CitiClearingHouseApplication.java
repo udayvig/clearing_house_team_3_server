@@ -28,22 +28,23 @@ public class CitiClearingHouseApplication {
 		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 		rdg.initialise();
-		rdg.generateInterestRateForFunds();
+		//rdg.generateInterestRateForFunds();
 		//rdg.generateTrades(10);
-		rdg.generateStockBorrowingRates();
-		rdg.generateOpeningStockBalances();
+		//rdg.generateStockBorrowingRates();
+		//rdg.generateOpeningStockBalances();
+		rdg.generateTradesEfficient(100);
 		
 //		rdg.generateTradeList(10);
 
 //		tradeDAO.addTradeList(rdg.generateTradeList(10));
 //		rdg.generateOpeningStockBalances();
-		StockObligation stockObligation = context.getBean(StockObligation.class);
+//		StockObligation stockObligation = context.getBean(StockObligation.class);
 //		FundObligation fundObligation = context.getBean(FundObligation.class);
 //		
-		stockObligation.initialise();
+//		stockObligation.initialise();
 //		fundObligation.initFundObligation();
 //		
-		stockObligation.setStockObligation();
+//		stockObligation.setStockObligation();
 //		fundObligation.setFundObligationDisplay();
 //		
 //		System.out.println(stockObligation.getStockObligationDisplay());
