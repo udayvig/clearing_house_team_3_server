@@ -8,6 +8,8 @@ public interface TradeDAO {
 	
 	void addTrade(int buyerClearingMemberID, int sellerClearingMemberID, double price, int quantity, int stockID);
 	
+	void addTradesEfficient(List<Integer> bcmids, List<Integer> scmids, List<Double> price, List<Integer> qty, List<Integer> stockids);
+	
 	Trade getTradeByTradeID(int tradeID);
 	
 	List<Trade> getTradesByStockID(int stockID);

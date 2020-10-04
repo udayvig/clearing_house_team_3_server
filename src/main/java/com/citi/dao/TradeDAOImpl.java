@@ -25,6 +25,34 @@ public class TradeDAOImpl implements TradeDAO {
 	}
 	
 	@Override
+	public void addTradesEfficient(List<Integer> bcmids, List<Integer> scmids, List<Double> price, List<Integer> qty, List<Integer> stockids) {
+		String SQL = "insert into trade (buying_clearing_member, selling_clearing_member, stock_id, quantity, price) "
+				+ "values ";
+		
+		StringBuilder query = new StringBuilder(SQL);
+		int n = qty.size();
+		
+		for(int i = 0; i < n; i++) {
+			query.append("(");
+			query.append(bcmids.get(i));
+			query.append(", ");
+			query.append(scmids.get(i));
+			query.append(", ");
+			query.append(stockids.get(i));
+			query.append(", ");
+			query.append(qty.get(i));
+			query.append(", ");
+			query.append(price.get(i));
+			query.append(")");
+			if(i != n - 1) {
+				query.append(", ");
+			}
+		}
+		
+		jdbcTemplateObject.update(query.toString());
+	}
+	
+	@Override
 	public Trade getTradeByTradeID(int tradeID) {
 		String SQL = "select * from trade where trade_id = ?";
 

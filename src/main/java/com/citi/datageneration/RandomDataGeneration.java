@@ -110,6 +110,51 @@ public class RandomDataGeneration {
 		return trade;
 	}
 	
+	public void generateTradesEfficient(int numberOfTrades) {
+		df.setRoundingMode(RoundingMode.DOWN);
+		List<Integer> bcmids = new ArrayList<>();
+		List<Integer> scmids = new ArrayList<>();
+		List<Integer> qty = new ArrayList<>();
+		List<Integer> stockids = new ArrayList<>();
+		List<Double> prices = new ArrayList<>();
+		
+		for(int i = 0; i < numberOfTrades; i++) {
+			int stockID = minForIDs + randomGenerator.nextInt(maxForStockIDs - minForIDs);
+			int buyerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
+			int sellerClearingMemberID = minForIDs + randomGenerator.nextInt(maxForClearingMemberIDs - minForIDs);
+			int quantity = minForQuantity + randomGenerator.nextInt(maxForQuantity - minForQuantity);
+			
+			double generatedPrice = 0.0;
+			switch(stockID) {
+			case 1:
+				generatedPrice = ThreadLocalRandom.current().nextDouble(105, 129);
+				break;
+			case 2:
+				generatedPrice = ThreadLocalRandom.current().nextDouble(239, 294);
+				break;
+			case 3:
+				generatedPrice = ThreadLocalRandom.current().nextDouble(474, 581);
+				break;
+			case 4:
+				generatedPrice = ThreadLocalRandom.current().nextDouble(2899, 3544);
+				break;
+			case 5:
+				generatedPrice = ThreadLocalRandom.current().nextDouble(1339, 1637);
+				break;
+			}
+			
+			double price = new Double(df.format(generatedPrice));
+			
+			bcmids.add(buyerClearingMemberID);
+			scmids.add(sellerClearingMemberID);
+			qty.add(quantity);
+			stockids.add(stockID);
+			prices.add(price);
+		}
+		
+		tradeDAO.addTradesEfficient(bcmids, scmids, prices, qty, stockids);
+	}
+	
 	public void generateOpeningStockBalances(){
 		int balance = 0;
 		
