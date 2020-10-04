@@ -28,23 +28,23 @@ public class CitiClearingHouseApplication {
 		ApplicationContext context = SpringApplication.run(ProjectConfig.class, args);
 		RandomDataGeneration rdg = context.getBean(RandomDataGeneration.class);
 		rdg.initialise();
-		//rdg.generateInterestRateForFunds();
+		rdg.generateInterestRateForFunds();
 		//rdg.generateTrades(10);
-		//rdg.generateStockBorrowingRates();
-		//rdg.generateOpeningStockBalances();
-		rdg.generateTradesEfficient(100);
+		rdg.generateStockBorrowingRates();
+		rdg.generateOpeningStockBalances();
+		//rdg.generateTradesEfficient(100);
 		
 //		rdg.generateTradeList(10);
 
 //		tradeDAO.addTradeList(rdg.generateTradeList(10));
 //		rdg.generateOpeningStockBalances();
-//		StockObligation stockObligation = context.getBean(StockObligation.class);
-//		FundObligation fundObligation = context.getBean(FundObligation.class);
+		StockObligation stockObligation = context.getBean(StockObligation.class);
+		FundObligation fundObligation = context.getBean(FundObligation.class);
 //		
-//		stockObligation.initialise();
-//		fundObligation.initFundObligation();
+		stockObligation.initialise();
+		fundObligation.initFundObligation();
 //		
-//		stockObligation.setStockObligation();
+		stockObligation.setStockObligation();
 //		fundObligation.setFundObligationDisplay();
 //		
 //		System.out.println(stockObligation.getStockObligationDisplay());
@@ -59,14 +59,14 @@ public class CitiClearingHouseApplication {
 //		fundObligation.initFundObligation();
 //		fundObligation.setFundObligationDisplayList();
 //
-//		fundObligation.initFundShortage();
-//		fundObligation.setFundShortageDisplayList();
+		fundObligation.initFundShortage();
+		fundObligation.setFundShortageDisplayList();
 //
 //		StockObligation stockObligation = context.getBean(StockObligation.class);
 //
 //		stockObligation.initialise();
-//		stockObligation.generateStockObligationReport();
-//		stockObligation.setShortage();
+		stockObligation.generateStockObligationReport();
+		stockObligation.setShortage();
 //
 //		System.out.println(stockObligation.getStockShortage());
 //
